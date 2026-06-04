@@ -359,14 +359,9 @@ function HomeLanding({ onGoIdentify, onGoResources, onGoHistory, onGoProfile }) 
       <main className="home-shell rise">
         <header className="home-title-wrap">
           <h1 className="home-title">
-            <span className="home-title-main">薪酬查询</span>
-            <span className="home-title-version"><em>1.0</em><span className="home-title-badge">专业版</span></span>
+            <span className="home-title-main">岗位薪资查询平台</span>
+            <span className="home-title-version"><em>5.0</em><span className="home-title-badge">专业版</span></span>
           </h1>
-          <div className="home-title-ornament" aria-hidden="true">
-            <span />
-            <PaidOutlinedIcon />
-            <span />
-          </div>
         </header>
 
         <section className="home-visual-stage" aria-label="薪酬查询与岗位全景">

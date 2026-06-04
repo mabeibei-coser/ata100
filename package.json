@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.28",
   "type": "module",
-  "description": "薪酬识别平台 5.0 专业版 - 薪资查询 + 短信登录 + VIP 会员 + 岗位全景文档",
+  "description": "岗位薪资查询平台 5.0 专业版 - 薪资查询 + 短信登录 + VIP 会员 + 岗位全景文档",
   "scripts": {
     "dev": "concurrently -k -n vite,api -c green,cyan \"vite\" \"node server.js\"",
     "dev:vite": "vite",
