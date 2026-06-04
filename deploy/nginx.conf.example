@@ -1,0 +1,54 @@
+# ════════════════════════════════════════════════════════════
+# 薪酬域三产品 nginx 子路径配置
+# 追加到 h100.jsai100.com 的 443 server block 内（与 a200 等并列）
+# 追加后：sudo nginx -t && sudo systemctl reload nginx
+#
+# 端口分配：ata100=4002  hazard-detect(A600)=4001  doc-library=4003
+# 技术栈：三者都是 Vite SPA + Express（不是 Next.js），后端已托管 dist/，
+#         nginx 只需把整个子路径透传给对应端口，无需 Next.js 那种 _next/ 剥前缀。
+# ════════════════════════════════════════════════════════════
+
+    # ── 会员中心 ata100（端口 4002）──
+    location /ata100/ {
+        proxy_pass http://127.0.0.1:4002/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 180s;
+        client_max_body_size 12m;
+    }
+    # 微信支付回调（POST，微信服务器直接打这个公网地址，必须能到）
+    # 上面 location /ata100/ 已覆盖 /ata100/api/pay/wechat/notify，无需单独写。
+    # 仅当回调验签失败排查时，确认这条路径没被别的 location 抢走。
+
+    # ── 薪资查询 A600（端口 4001）──
+    # ⚠️ 服务器上可能已有旧的 /a600 location（无验证码版），部署接入版时
+    #    用本块【替换】旧的，proxy_pass 端口不变(4001)，主要是确保 trailing slash 一致。
+    location /a600/ {
+        proxy_pass http://127.0.0.1:4001/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 180s;
+        client_max_body_size 12m;
+    }
+
+    # ── 岗位全景文档 A800（端口 4003）──
+    location /a800/ {
+        proxy_pass http://127.0.0.1:4003/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 60s;
+        client_max_body_size 60m;   # 文档附件上传留余量
+    }
+
+# 注：proxy_pass 末尾带 / + location 带 / = nginx 自动 strip 子路径前缀，
+# Express 收到的是 /api/xxx（不带 /ata100）。这与各产品 server.js 的路由定义一致
+# （路由都写的 /api/...，不含子路径前缀），且 Vite base 已设 /ata100/ 让前端请求带前缀。

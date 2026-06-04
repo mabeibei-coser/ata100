@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Env / secrets
+.env
+.env.local
+.env*.local
+
+# Data (better-sqlite3 + 运行时 prompts.json — admin-hub 会改写)
+data/*
+# 但 seed 要进 git，首次部署 cp 一份成 prompts.json
+!data/prompts.seed.json
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+.claude/
+
+# Design exploration screenshots (设计探索中间产物)
+docs/design/
