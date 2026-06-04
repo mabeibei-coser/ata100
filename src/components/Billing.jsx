@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, Alert, CircularProgress, IconButton, Stack } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -18,23 +18,42 @@ export default function Billing({ onPaid, onBack }) {
   const [error, setError] = useState(null);
   const [info, setInfo] = useState(null);
 
+  // OAuth 回跳后由 ?autoPay=<id> 续触发支付；用 ref 避免 React 严格模式 effect 重复执行而重发单。
+  const autoPayFiredRef = useRef(false);
+
   useEffect(() => {
     fetchPackages()
       .then((d) => {
         setPackages(d.packages);
-        const rec = d.packages.find((p) => p.id === 'pkg_12m') || d.packages[0];
-        setSelected(rec?.id || null);
+        // OAuth 回跳带 ?autoPay=<id>：选中对应套餐并立即续起支付（避免用户点第二次）
+        const params = new URLSearchParams(window.location.search);
+        const autoPayId = params.get('autoPay');
+        const matched = autoPayId && d.packages.find((p) => p.id === autoPayId);
+        if (matched && !autoPayFiredRef.current) {
+          autoPayFiredRef.current = true;
+          setSelected(matched.id);
+          // 清掉 URL 上的 autoPay，防止刷新页面又触发一次
+          params.delete('autoPay');
+          const search = params.toString();
+          window.history.replaceState(null, '', window.location.pathname + (search ? `?${search}` : ''));
+          handlePayFor(matched.id);
+        } else {
+          const rec = d.packages.find((p) => p.id === 'pkg_12m') || d.packages[0];
+          setSelected(rec?.id || null);
+        }
       })
       .catch((e) => setError(e.message));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handlePay = async () => {
-    if (!selected || loading) return;
+  // 真正发起支付的核心逻辑；接受 packageId 入参，让 OAuth 回跳后能用 URL 上的 id 直接续起来。
+  const handlePayFor = async (packageId) => {
+    if (!packageId || loading) return;
     setLoading(true);
     setError(null);
     setInfo(null);
     try {
-      const order = await createOrder(selected, '/billing');
+      const order = await createOrder(packageId, '/billing');
       try {
         await invokeWechatPay(order.jsapi); // 微信内：真调起
         await pollUntilPaid(order.outTradeNo);
@@ -49,7 +68,10 @@ export default function Billing({ onPaid, onBack }) {
       onPaid?.();
     } catch (err) {
       if (err.status === 401 && err.data?.needOauth) {
-        window.location.href = `${import.meta.env.BASE_URL.replace(/\/$/, '')}${err.data.redirectTo}`;
+        // 跳 OAuth 前把 packageId 写进 from，回跳后挂载时自动续支付，免用户再点一次
+        const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+        const from = encodeURIComponent(`/billing?autoPay=${encodeURIComponent(packageId)}`);
+        window.location.href = `${base}/api/wechat/oauth/init?from=${from}`;
         return;
       }
       setError(err.message || '支付失败');
@@ -57,6 +79,8 @@ export default function Billing({ onPaid, onBack }) {
       setLoading(false);
     }
   };
+
+  const handlePay = () => handlePayFor(selected);
 
   const pollUntilPaid = async (outTradeNo) => {
     for (let i = 0; i < 10; i++) {
