@@ -33,6 +33,9 @@ const daysLeft = (ts) => {
 // 手机号中间 4 位打码：18621933756 → 186****3756
 const maskPhone = (p) => (p ? String(p).replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : p)
 
+// 岗位全景文档入口：A800 文档库（一库管两域，部署在 /a800/），按 category=人才ATA 过滤出薪酬域文档
+const DOC_LIB_ATA_URL = '/a800/?category=' + encodeURIComponent('人才ATA')
+
 // ata100 = 薪酬域会员中心
 function App() {
   const [me, setMe] = useState(null)
@@ -153,7 +156,7 @@ function App() {
     return (
       <HomeLanding
         onGoIdentify={() => goProduct('/a500/')}
-        onGoResources={() => goProduct('/ata-docs/')}
+        onGoResources={() => goProduct(DOC_LIB_ATA_URL)}
         onGoHistory={() => setView('history')}
         onGoProfile={() => setView('profile')}
       />
@@ -241,8 +244,8 @@ function App() {
                 eyebrow="文档库"
                 title="岗位全景文档"
                 desc="薪酬调研 / 行业报告 / 岗位分析 / HR 模板，按主题检索。VIP 可下载全部文档。"
-                href="/ata-docs/"
-                onActivate={() => goProduct('/ata-docs/')}
+                href={DOC_LIB_ATA_URL}
+                onActivate={() => goProduct(DOC_LIB_ATA_URL)}
               />
             </Box>
 
