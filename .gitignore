@@ -28,3 +28,7 @@ Thumbs.db
 
 # Design exploration screenshots (设计探索中间产物)
 docs/design/
+
+# Local task plans + local output
+.planning/
+output/

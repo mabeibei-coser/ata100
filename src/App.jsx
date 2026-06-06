@@ -130,20 +130,17 @@ function App() {
               <ArrowBackIcon sx={{ fontSize: 18 }} />
             </IconButton>
           </Box>
-          <Box sx={{ textAlign: 'center', mb: 2 }}>
-            <Box sx={{
-              width: 46, height: 46, mx: 'auto', mb: 1.75,
-              borderRadius: 'var(--r-md)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: 'linear-gradient(180deg, #1e3a5f 0%, #2563eb 100%)',
-              boxShadow: '0 8px 22px rgba(37, 99, 235, 0.28)',
-            }}>
-              <PaidOutlinedIcon sx={{ color: '#fff', fontSize: 24 }} />
+          <Box sx={{ textAlign: 'center', mb: 2.5 }}>
+            <Box className="brand-mark brand-mark-lg" sx={{ mx: 'auto', mb: 2 }}>
+              <PaidOutlinedIcon sx={{ fontSize: 28 }} />
             </Box>
-            <div className="h-eyebrow" style={{ marginBottom: 8 }}>ata100 · 会员中心</div>
-            <h1 className="h-display" style={{ fontSize: '1.42rem', lineHeight: 1.2 }}>
-              欢迎使用薪酬查询平台
+            <div className="h-eyebrow" style={{ marginBottom: 8 }}>ata · 薪酬域会员中心</div>
+            <h1 className="h-display" style={{ fontSize: '1.52rem', lineHeight: 1.18, marginBottom: 8 }}>
+              查薪酬 · 看全景
             </h1>
+            <p style={{ color: 'var(--ink-2)', fontSize: '0.84rem', lineHeight: 1.55, maxWidth: 280, margin: '0 auto' }}>
+              输入手机号 · 60 秒内收到验证码 · 登录态全域通用
+            </p>
           </Box>
           <LoginForm onLoggedIn={handleLoggedIn} />
         </Container>
@@ -166,31 +163,29 @@ function App() {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', py: { xs: 3, md: 5 }, pb: { xs: 11, md: 12 } }}>
-      <Container maxWidth="md">
-        {/* ═══ 顶部 nav：左 logo + 标题；右 手机号 + 退出 ═══ */}
-        <Box component="nav" className="rise" sx={{
+    <Box className="inner-page" sx={{ pb: { xs: 11, md: 12 } }}>
+      {/* ═══ 玻璃浮顶 nav：左 brand mark + 标题；右 手机号 + 退出 ═══ */}
+      <Box component="nav" className="top-nav-glass">
+        <Container maxWidth="md" disableGutters sx={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          mb: { xs: 4, md: 6 },
         }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Box sx={{
-              width: 32, height: 32, borderRadius: 'var(--r-sm)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: 'linear-gradient(180deg, #1e3a5f 0%, #2563eb 100%)',
-              boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)',
-              flexShrink: 0,
-            }}>
-              <PaidOutlinedIcon sx={{ color: '#fff', fontSize: 18 }} />
+            <Box className="brand-mark">
+              <PaidOutlinedIcon sx={{ fontSize: 18 }} />
             </Box>
-            <Box sx={{ fontSize: '0.95rem', fontWeight: 650, color: 'var(--ink)', letterSpacing: '-0.012em', lineHeight: 1.2 }}>
-              薪酬域 · 会员中心
+            <Box sx={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
+              <Box sx={{ fontSize: '0.95rem', fontWeight: 750, color: 'var(--ink)', letterSpacing: '-0.012em' }}>
+                薪酬域 · 会员中心
+              </Box>
+              <Box sx={{ fontSize: '0.66rem', fontWeight: 600, color: 'var(--ink-3)', letterSpacing: '0.06em', textTransform: 'uppercase', mt: 0.25 }}>
+                ata · membership
+              </Box>
             </Box>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
             {me ? (
               <>
-                <Box className="num" sx={{ fontSize: '0.84rem', color: 'var(--ink-2)' }}>{maskPhone(me.phone)}</Box>
+                <Box className="num" sx={{ fontSize: '0.82rem', color: 'var(--ink-2)', display: { xs: 'none', sm: 'block' } }}>{maskPhone(me.phone)}</Box>
                 <Tooltip title="退出登录">
                   <IconButton size="small" onClick={handleLogout} sx={{
                     color: 'var(--ink-3)', p: 0.6,
@@ -211,7 +206,10 @@ function App() {
               </Button>
             )}
           </Box>
-        </Box>
+        </Container>
+      </Box>
+
+      <Container maxWidth="md" sx={{ pt: { xs: 3, md: 4 } }}>
 
         {view === 'home' && (
           <>
