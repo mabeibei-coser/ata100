@@ -12,6 +12,8 @@ import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import './styles/index.css'
+import homeHeroDesktop from './assets/home-ata-hero-desktop.png'
+import homeHeroMobile from './assets/home-ata-hero-mobile.png'
 import LoginForm from './components/LoginForm'
 import Billing from './components/Billing'
 import Profile from './components/Profile'
@@ -365,6 +367,7 @@ function HomeLanding({ onGoIdentify, onGoResources, onGoHistory, onGoProfile }) 
         </header>
 
         <section className="home-visual-stage" aria-label="薪酬查询与岗位全景">
+          <HomeHeroArt />
           <section className="home-actions" aria-label="主要功能">
             <HomeActionCard
               icon={<SalarySearchIcon />}
@@ -382,6 +385,17 @@ function HomeLanding({ onGoIdentify, onGoResources, onGoHistory, onGoProfile }) 
         <BottomNav active="home" onGoHome={() => {}} onGoHistory={onGoHistory} onGoProfile={onGoProfile} />
       </main>
     </Box>
+  )
+}
+
+function HomeHeroArt() {
+  return (
+    <section className="home-hero-art" aria-hidden="true">
+      <picture>
+        <source media="(min-width: 768px)" srcSet={homeHeroDesktop} />
+        <img className="home-hero-image" src={homeHeroMobile} alt="" draggable="false" />
+      </picture>
+    </section>
   )
 }
 
@@ -421,8 +435,8 @@ function SalarySearchIcon() {
     <svg className="home-custom-icon" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
       <defs>
         <linearGradient id="salaryIconGradient" x1="22" y1="18" x2="74" y2="78" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#3b82f6" />
-          <stop offset="1" stopColor="#1e3a5f" />
+          <stop stopColor="#17a79d" />
+          <stop offset="1" stopColor="#0f766e" />
         </linearGradient>
       </defs>
       <circle cx="42" cy="42" r="20" fill="none" stroke="url(#salaryIconGradient)" strokeWidth="4" />
