@@ -6,10 +6,6 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { fetchPackages, createOrder, mockPaid, invokeWechatPay, queryOrder } from '../utils/api';
 
 const yuan = (cents) => `¥${(cents / 100).toFixed(2)}`;
-const currentDateLabel = () => {
-  const d = new Date();
-  return `${d.getFullYear()}年${String(d.getMonth() + 1).padStart(2, '0')}月${String(d.getDate()).padStart(2, '0')}日`;
-};
 // 计算月均价格，给用户直观感
 const perMonth = (cents, days) => {
   const months = Math.max(1, days / 30);
@@ -126,14 +122,14 @@ export default function Billing({ onPaid, onBack }) {
         <Box sx={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--ink)', letterSpacing: '-0.012em' }}>
           选择套餐
         </Box>
-        <Box className="h-eyebrow">{currentDateLabel()}</Box>
+        <Box className="h-eyebrow">step 1 / 2</Box>
       </Box>
 
       {/* 套餐选择：选中态金色光晕，"推荐"badge 更醒目 */}
       <Stack spacing={1.25} sx={{ mb: 2.5 }}>
         {packages.map((p) => {
           const active = selected === p.id;
-          const isRecommended = p.badge && /推荐|划算|最|超值|限时/.test(p.badge);
+          const isRecommended = p.badge && /推荐|划算|最|超值/.test(p.badge);
           return (
             <Box
               key={p.id}
@@ -225,28 +221,14 @@ export default function Billing({ onPaid, onBack }) {
                   )}
                 </Box>
               </Box>
-              <Box sx={{ flexShrink: 0, textAlign: 'right' }}>
-                <Box className="num" sx={{
-                  fontSize: '1.18rem',
-                  fontWeight: 800,
-                  color: 'var(--ink)',
-                  letterSpacing: '-0.015em',
-                  lineHeight: 1.1,
-                }}>
-                  {yuan(p.amountCents)}
-                </Box>
-                {p.originalAmountCents && (
-                  <Box className="num" sx={{
-                    mt: 0.35,
-                    fontSize: '0.76rem',
-                    fontWeight: 650,
-                    color: 'var(--ink-3)',
-                    textDecoration: 'line-through',
-                    textDecorationThickness: '1.5px',
-                  }}>
-                    {yuan(p.originalAmountCents)}
-                  </Box>
-                )}
+              <Box className="num" sx={{
+                fontSize: '1.18rem',
+                fontWeight: 800,
+                color: 'var(--ink)',
+                letterSpacing: '-0.015em',
+                flexShrink: 0,
+              }}>
+                {yuan(p.amountCents)}
               </Box>
             </Box>
           );
