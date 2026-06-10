@@ -174,8 +174,8 @@ function App() {
               <Box sx={{ fontSize: '0.95rem', fontWeight: 750, color: 'var(--ink)', letterSpacing: '-0.012em' }}>
                 薪酬域 · 会员中心
               </Box>
-              <Box sx={{ fontSize: '0.66rem', fontWeight: 600, color: 'var(--ink-3)', letterSpacing: '0.06em', textTransform: 'uppercase', mt: 0.25 }}>
-                ata · membership
+              <Box sx={{ fontSize: '0.66rem', fontWeight: 600, color: 'var(--ink-3)', letterSpacing: '0.02em', mt: 0.25 }}>
+                10万+会员
               </Box>
             </Box>
           </Box>
@@ -324,11 +324,13 @@ function App() {
           </Box>
         )}
 
-        <Box component="footer" sx={{ textAlign: 'center', mt: 5, pb: 3 }}>
-          <Box sx={{ fontSize: '0.72rem', color: 'var(--ink-3)', letterSpacing: '0.04em' }}>
-            谨世 ATA 薪酬查询平台
+        {view !== 'billing' && (
+          <Box component="footer" sx={{ textAlign: 'center', mt: 5, pb: 3 }}>
+            <Box sx={{ fontSize: '0.72rem', color: 'var(--ink-3)', letterSpacing: '0.04em' }}>
+              谨世 ATA 薪酬查询平台
+            </Box>
           </Box>
-        </Box>
+        )}
       </Container>
       {view !== 'billing' && (
         <BottomNav
