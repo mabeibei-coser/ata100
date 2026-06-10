@@ -32,13 +32,8 @@ export async function fetchMe() {
   }
 }
 export const sendSmsCode = (phone) => http('POST', '/sms/send', { phone });
-export const verifySmsCode = (phone, code, agreed = true) =>
-  http('POST', '/sms/verify', { phone, code, agreed });
+export const verifySmsCode = (phone, code) => http('POST', '/sms/verify', { phone, code });
 export const logout = () => http('POST', '/logout');
-
-// ── 法律协议（公开，登录页 / 协议页用）──
-// type: 'terms' | 'privacy'
-export const fetchLegal = (type) => http('GET', `/legal/${type}`);
 
 // ── 会员 ──
 export const fetchMembership = () => http('GET', '/membership/me');
@@ -96,6 +91,5 @@ export function invokeWechatPay(jsapi) {
 export default {
   fetchMe, sendSmsCode, verifySmsCode, logout,
   fetchMembership, fetchLedger, fetchPackages,
-  fetchLegal,
   createOrder, queryOrder, mockPaid, invokeWechatPay,
 };

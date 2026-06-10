@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, TextField, Button, Alert, Checkbox } from '@mui/material';
+import { Box, TextField, Button, Alert } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import { sendSmsCode, verifySmsCode } from '../utils/api';
 
@@ -14,7 +14,7 @@ const ACCENT_RGB = '15, 118, 110';
  * 流程：输手机号 → 获取验证码（60s 倒计时）→ 输 6 位码 → 登录。
  * 登录成功后回调 onLoggedIn({ userId, phone })，由父组件刷新页面状态。
  */
-export default function LoginForm({ onLoggedIn, onShowLegal }) {
+export default function LoginForm({ onLoggedIn }) {
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState('');
   const [countdown, setCountdown] = useState(0);
@@ -22,13 +22,12 @@ export default function LoginForm({ onLoggedIn, onShowLegal }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [info, setInfo] = useState(null);
-  const [agreed, setAgreed] = useState(false);
   const timerRef = useRef(null);
 
   const phoneValid = PHONE_RE.test(phone);
   const codeValid = /^\d{6}$/.test(code);
   const canSend = phoneValid && !sending && countdown === 0;
-  const canSubmit = phoneValid && codeValid && agreed && !loading;
+  const canSubmit = phoneValid && codeValid && !loading;
 
   useEffect(() => () => clearInterval(timerRef.current), []);
 
@@ -71,19 +70,13 @@ export default function LoginForm({ onLoggedIn, onShowLegal }) {
     setLoading(true);
     setError(null);
     try {
-      const data = await verifySmsCode(phone, code, true);
+      const data = await verifySmsCode(phone, code);
       onLoggedIn?.(data);
     } catch (err) {
       setError(err.message || '登录失败');
     } finally {
       setLoading(false);
     }
-  };
-
-  const openLegal = (type) => (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onShowLegal?.(type);
   };
 
   // 输入框统一样式：聚焦时品牌色描边 + 柔和高亮环
@@ -176,63 +169,6 @@ export default function LoginForm({ onLoggedIn, onShowLegal }) {
 
       {info && <Alert severity="info" sx={{ borderRadius: 2.5, py: 0.5, alignItems: 'center' }}>{info}</Alert>}
       {error && <Alert severity="error" sx={{ borderRadius: 2.5, py: 0.5, alignItems: 'center' }}>{error}</Alert>}
-
-      {/* 协议勾选：必勾才能登录 */}
-      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 0.5, mt: 0.5, mx: -0.5 }}>
-        <Checkbox
-          checked={agreed}
-          onChange={(e) => setAgreed(e.target.checked)}
-          disabled={loading}
-          size="small"
-          sx={{
-            p: 0.5, mt: '-2px',
-            color: 'rgba(15,23,42,0.35)',
-            '&.Mui-checked': { color: ACCENT },
-          }}
-        />
-        <Box
-          component="label"
-          onClick={() => !loading && setAgreed((v) => !v)}
-          sx={{
-            fontSize: '0.8rem',
-            color: 'var(--ink-2, #475569)',
-            lineHeight: 1.55,
-            cursor: loading ? 'default' : 'pointer',
-            userSelect: 'none',
-          }}
-        >
-          我已阅读并同意
-          <Box
-            component="a"
-            href="#"
-            onClick={openLegal('terms')}
-            sx={{
-              color: ACCENT,
-              textDecoration: 'none',
-              fontWeight: 600,
-              mx: 0.25,
-              '&:hover': { textDecoration: 'underline' },
-            }}
-          >
-            服务使用协议
-          </Box>
-          和
-          <Box
-            component="a"
-            href="#"
-            onClick={openLegal('privacy')}
-            sx={{
-              color: ACCENT,
-              textDecoration: 'none',
-              fontWeight: 600,
-              mx: 0.25,
-              '&:hover': { textDecoration: 'underline' },
-            }}
-          >
-            隐私政策
-          </Box>
-        </Box>
-      </Box>
 
       <Button
         type="submit"
