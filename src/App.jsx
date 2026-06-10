@@ -330,12 +330,14 @@ function App() {
           </Box>
         </Box>
       </Container>
-      <BottomNav
-        active={view === 'history' ? 'records' : view === 'home' ? 'home' : 'mine'}
-        onGoHome={() => setView('home')}
-        onGoHistory={() => setView('history')}
-        onGoProfile={() => setView('profile')}
-      />
+      {view !== 'billing' && (
+        <BottomNav
+          active={view === 'history' ? 'records' : view === 'home' ? 'home' : 'mine'}
+          onGoHome={() => setView('home')}
+          onGoHistory={() => setView('history')}
+          onGoProfile={() => setView('profile')}
+        />
+      )}
     </Box>
   )
 }
