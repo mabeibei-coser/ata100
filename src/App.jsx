@@ -359,9 +359,15 @@ function App() {
 }
 
 function HomeLanding({ onGoIdentify, onGoResources, onGoHistory, onGoProfile }) {
+  const now = new Date()
+  const dbVersion = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+  const currentYear = now.getFullYear()
   return (
     <Box className="home-page">
       <main className="home-shell rise">
+        <div className="home-db-version-row">
+          <span className="home-db-version-badge">大数据库版本 {dbVersion}</span>
+        </div>
         <header className="home-title-wrap">
           <h1 className="home-title">
             <span className="home-title-main">岗位薪资查询平台</span>
@@ -385,6 +391,9 @@ function HomeLanding({ onGoIdentify, onGoResources, onGoHistory, onGoProfile }) 
           </section>
         </section>
 
+        <div className="home-copyright">
+          ATA大数据中心2013-{currentYear} · 沪ICP备2023040758号-1
+        </div>
         <BottomNav active="home" onGoHome={() => {}} onGoHistory={onGoHistory} onGoProfile={onGoProfile} />
       </main>
     </Box>
