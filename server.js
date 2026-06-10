@@ -21,6 +21,7 @@ const {
   getRecentLedger,
 } = await import("./lib/membership.js");
 const { getSalaryHistory, getSalaryReportDetail, getDocDownloadHistory } = await import("./lib/history.js");
+const { getLegal, LEGAL_TYPES } = await import("./lib/legal.js");
 const { createJsapiOrder, verifyNotify } = await import("./lib/wechat-pay.js");
 const {
   buildAuthorizeUrl,
@@ -99,8 +100,12 @@ app.post("/api/sms/send", async (req, res) => {
 app.post("/api/sms/verify", async (req, res) => {
   const phone = String(req.body?.phone || "").trim();
   const code = String(req.body?.code || "").trim();
+  const agreed = req.body?.agreed === true;
   if (!PHONE_RE.test(phone) || !/^\d{6}$/.test(code)) {
     return res.status(400).json({ error: "请输入手机号和 6 位验证码" });
+  }
+  if (!agreed) {
+    return res.status(400).json({ error: "请先勾选同意服务使用协议和隐私政策" });
   }
   const attempt = await checkVerifyLimit(phone);
   if (!attempt.ok) {
@@ -133,7 +138,7 @@ app.post("/api/sms/verify", async (req, res) => {
       db.prepare("UPDATE sms_codes SET used = 1 WHERE id = ?").run(row.id);
     }
 
-    const userId = upsertUserByPhone(phone);
+    const userId = upsertUserByPhone(phone, { recordAgreement: true });
     ensureMembership(phone);
 
     const session = await getSession(req, res);
@@ -187,6 +192,23 @@ app.get(
 // 套餐列表（公开）
 app.get("/api/packages", (req, res) => {
   res.json({ packages: listPackages() });
+});
+
+// ════════════ 法律协议（公开）════════════
+// type: 'terms'（服务使用协议）/ 'privacy'（隐私政策）。admin-hub 后台编辑。
+app.get("/api/legal/:type", (req, res) => {
+  const type = String(req.params.type || "");
+  if (!LEGAL_TYPES.includes(type)) {
+    return res.status(404).json({ error: "协议不存在" });
+  }
+  const row = getLegal(type);
+  if (!row) return res.status(404).json({ error: "协议未配置" });
+  res.json({
+    type: row.type,
+    title: row.title,
+    content: row.content,
+    updatedAt: row.updated_at,
+  });
 });
 
 // ════════════ 我的历史（只读聚合各业务积木的记录）════════════

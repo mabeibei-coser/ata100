@@ -19,7 +19,7 @@ import Billing from './components/Billing'
 import Profile from './components/Profile'
 import History from './components/History'
 import Payments from './components/Payments'
-import { fetchMe, fetchMembership, logout } from './utils/api'
+import { fetchMe, fetchMembership, fetchLegal, logout } from './utils/api'
 
 const fmtDate = (ts) => {
   if (!ts) return '—'
@@ -134,18 +134,23 @@ function App() {
             <Box className="brand-mark brand-mark-lg" sx={{ mx: 'auto', mb: 2 }}>
               <PaidOutlinedIcon sx={{ fontSize: 28 }} />
             </Box>
-            <div className="h-eyebrow" style={{ marginBottom: 8 }}>ata · 薪酬域会员中心</div>
+            <div className="h-eyebrow" style={{ marginBottom: 8 }}>登录ATA · 薪酬域</div>
             <h1 className="h-display" style={{ fontSize: '1.52rem', lineHeight: 1.18, marginBottom: 8 }}>
               查薪酬 · 看全景
             </h1>
             <p style={{ color: 'var(--ink-2)', fontSize: '0.84rem', lineHeight: 1.55, maxWidth: 280, margin: '0 auto' }}>
-              输入手机号 · 60 秒内收到验证码 · 登录态全域通用
+              全行业薪资数据 · 岗位智能分析 · 当前年月更新
             </p>
           </Box>
-          <LoginForm onLoggedIn={handleLoggedIn} />
+          <LoginForm onLoggedIn={handleLoggedIn} onShowLegal={(type) => setView(type)} />
         </Container>
       </Box>
     )
+  }
+
+  // 协议页（公开，无需登录）：服务使用协议 / 隐私政策
+  if (view === 'terms' || view === 'privacy') {
+    return <LegalPage type={view} onBack={() => setView('login')} />
   }
 
   const isVip = membership?.isVip
@@ -578,6 +583,160 @@ function TextLink({ children, icon, onClick }) {
 
 function Dot() {
   return <Box sx={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ink-4)' }} />
+}
+
+// 协议页：服务使用协议 / 隐私政策。从 /api/legal/:type 读 Markdown 内容并渲染。
+function LegalPage({ type, onBack }) {
+  const [data, setData] = useState(null)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    setData(null); setError(null)
+    fetchLegal(type)
+      .then((d) => { if (!cancelled) setData(d) })
+      .catch((e) => { if (!cancelled) setError(e.message || '加载失败') })
+    return () => { cancelled = true }
+  }, [type])
+
+  const fallbackTitle = type === 'terms' ? '服务使用协议' : '隐私政策'
+
+  return (
+    <Box className="login-page" sx={{
+      minHeight: '100dvh',
+      display: 'flex', flexDirection: 'column',
+      pt: { xs: '4vh', md: '6vh' }, pb: { xs: 4, md: 6 }, px: 2,
+    }}>
+      <Container maxWidth="sm" disableGutters sx={{ px: 0 }}>
+        <Box sx={{ mb: 1.5 }}>
+          <IconButton size="small" onClick={onBack} sx={{
+            color: 'var(--ink-3)',
+            '&:hover': { color: 'var(--ink)', background: 'var(--bg-mute)' },
+          }}>
+            <ArrowBackIcon sx={{ fontSize: 18 }} />
+          </IconButton>
+        </Box>
+        <Box sx={{
+          background: 'rgba(255, 255, 255, 0.92)',
+          borderRadius: 'var(--r-lg)',
+          border: '1px solid rgba(15, 118, 110, 0.10)',
+          boxShadow: '0 14px 36px rgba(15, 118, 110, 0.08), 0 2px 6px rgba(15, 20, 25, 0.04)',
+          p: { xs: 2.5, md: 3.5 },
+        }}>
+          <h1 style={{
+            fontSize: '1.25rem', fontWeight: 700, color: 'var(--ink)',
+            marginTop: 0, marginBottom: 16, letterSpacing: '-0.012em',
+          }}>
+            {data?.title || fallbackTitle}
+          </h1>
+          {error && (
+            <p style={{ color: '#b91c1c', fontSize: '0.88rem' }}>加载失败：{error}</p>
+          )}
+          {!error && !data && (
+            <p style={{ color: 'var(--ink-3)', fontSize: '0.88rem' }}>加载中…</p>
+          )}
+          {data && !data.content && (
+            <p style={{ color: 'var(--ink-3)', fontSize: '0.88rem' }}>
+              协议内容暂未配置，请联系平台管理员。
+            </p>
+          )}
+          {data && data.content && <MarkdownView text={data.content} />}
+        </Box>
+      </Container>
+    </Box>
+  )
+}
+
+// 极简 Markdown 渲染：覆盖标题（# ## ###）、段落、列表（- / *）、加粗（**）、链接（[x](url)）
+function MarkdownView({ text }) {
+  const blocks = parseMarkdownBlocks(text)
+  return (
+    <Box sx={{
+      color: 'var(--ink, #1e293b)',
+      fontSize: '0.9rem',
+      lineHeight: 1.75,
+      '& h1, & h2, & h3': { color: 'var(--ink)', fontWeight: 700, letterSpacing: '-0.012em' },
+      '& h1': { fontSize: '1.18rem', mt: 2.5, mb: 1.25 },
+      '& h2': { fontSize: '1.05rem', mt: 2, mb: 1 },
+      '& h3': { fontSize: '0.96rem', mt: 1.5, mb: 0.75 },
+      '& p': { mt: 0, mb: 1.25 },
+      '& ul': { pl: 2.5, mt: 0, mb: 1.25 },
+      '& li': { mb: 0.5 },
+      '& strong': { fontWeight: 700, color: 'var(--ink)' },
+      '& a': { color: 'var(--accent, #0f766e)', textDecoration: 'underline' },
+      '& > *:first-of-type': { mt: 0 },
+    }}>
+      {blocks.map((b, i) => renderBlock(b, i))}
+    </Box>
+  )
+}
+
+function parseMarkdownBlocks(text) {
+  const lines = String(text || '').replace(/\r\n/g, '\n').split('\n')
+  const blocks = []
+  let para = []
+  let list = null
+
+  const flushPara = () => {
+    if (para.length) { blocks.push({ type: 'p', text: para.join(' ') }); para = [] }
+  }
+  const flushList = () => {
+    if (list) { blocks.push(list); list = null }
+  }
+
+  for (const raw of lines) {
+    const line = raw.trim()
+    if (!line) { flushPara(); flushList(); continue }
+    const h = line.match(/^(#{1,3})\s+(.+)$/)
+    if (h) { flushPara(); flushList(); blocks.push({ type: 'h', level: h[1].length, text: h[2] }); continue }
+    const li = line.match(/^[-*]\s+(.+)$/)
+    if (li) {
+      flushPara()
+      if (!list) list = { type: 'ul', items: [] }
+      list.items.push(li[1])
+      continue
+    }
+    flushList()
+    para.push(line)
+  }
+  flushPara(); flushList()
+  return blocks
+}
+
+function renderBlock(b, i) {
+  if (b.type === 'h') {
+    const Tag = `h${b.level}`
+    return <Tag key={i}>{renderInline(b.text)}</Tag>
+  }
+  if (b.type === 'ul') {
+    return (
+      <ul key={i}>
+        {b.items.map((it, j) => <li key={j}>{renderInline(it)}</li>)}
+      </ul>
+    )
+  }
+  return <p key={i}>{renderInline(b.text)}</p>
+}
+
+// 行内：**加粗** 和 [文本](url) 两种
+function renderInline(text) {
+  const out = []
+  let rest = String(text || '')
+  let idx = 0
+  // 同时匹配 **xx** 和 [xx](yy)
+  const re = /(\*\*([^*]+)\*\*)|(\[([^\]]+)\]\(([^)]+)\))/
+  let m
+  while ((m = rest.match(re))) {
+    if (m.index > 0) out.push(<span key={idx++}>{rest.slice(0, m.index)}</span>)
+    if (m[1]) {
+      out.push(<strong key={idx++}>{m[2]}</strong>)
+    } else {
+      out.push(<a key={idx++} href={m[5]} target="_blank" rel="noopener noreferrer">{m[4]}</a>)
+    }
+    rest = rest.slice(m.index + m[0].length)
+  }
+  if (rest) out.push(<span key={idx++}>{rest}</span>)
+  return out
 }
 
 export default App
