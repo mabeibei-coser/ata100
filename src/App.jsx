@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import {
-  Container, Box, Button, CircularProgress, IconButton,
+  Container, Box, Button, CircularProgress, IconButton, Tooltip,
 } from '@mui/material'
+import LogoutIcon from '@mui/icons-material/Logout'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined'
@@ -18,7 +19,7 @@ import Billing from './components/Billing'
 import Profile from './components/Profile'
 import History from './components/History'
 import Payments from './components/Payments'
-import { fetchMe, fetchMembership, fetchLegal } from './utils/api'
+import { fetchMe, fetchMembership, fetchLegal, logout } from './utils/api'
 
 const fmtDate = (ts) => {
   if (!ts) return '—'
@@ -80,6 +81,13 @@ function App() {
     if (pendingNav) { const url = pendingNav; setPendingNav(null); window.location.href = url; return }
     // 主动点"登录"进来的回首页；进受保护视图（billing/profile/history）的就地展开，不动 view
     if (view === 'login') setView('home')
+  }
+
+  const handleLogout = async () => {
+    try { await logout() } catch { /* ignore */ }
+    setMe(null)
+    setMembership(null)
+    setView('home')
   }
 
   const handlePaid = () => {
@@ -181,7 +189,17 @@ function App() {
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
             {me ? (
-              <Box className="num" sx={{ fontSize: '0.82rem', color: 'var(--ink-2)', display: { xs: 'none', sm: 'block' } }}>{maskPhone(me.phone)}</Box>
+              <>
+                <Box className="num" sx={{ fontSize: '0.82rem', color: 'var(--ink-2)', display: { xs: 'none', sm: 'block' } }}>{maskPhone(me.phone)}</Box>
+                <Tooltip title="退出登录">
+                  <IconButton size="small" onClick={handleLogout} sx={{
+                    color: 'var(--ink-3)', p: 0.6,
+                    '&:hover': { color: 'var(--ink)', background: 'var(--bg-mute)' },
+                  }}>
+                    <LogoutIcon sx={{ fontSize: 17 }} />
+                  </IconButton>
+                </Tooltip>
+              </>
             ) : (
               <Button onClick={() => setView('login')} disableElevation sx={{
                 px: 1.75, py: 0.6, fontSize: '0.82rem', fontWeight: 600,
@@ -319,7 +337,7 @@ function App() {
           <Box className="surface rise" component="section" sx={{ p: { xs: 2.5, md: 3.5 } }}>
             {view === 'billing' && <Billing onPaid={handlePaid} onBack={() => setView('home')} />}
             {view === 'profile' && <Profile membership={membership} onBuy={() => setView('billing')} onBack={() => setView('home')} onGoHistory={() => setView('history')} onGoPayments={() => setView('payments')} />}
-            {view === 'history' && <History isVip={isVip} onBack={() => setView('home')} />}
+            {view === 'history' && <History onBack={() => setView('home')} />}
             {view === 'payments' && <Payments onBack={() => setView('profile')} />}
           </Box>
         )}
