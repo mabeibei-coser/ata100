@@ -225,6 +225,10 @@ app.get(
 app.get(
   "/api/me/history/salary/:id",
   requireSession(async (req, res) => {
+    const m = getMembership(req.session.phone);
+    if (!m.isVip) {
+      return res.status(403).json({ error: "开通 VIP 后可查看历史报告完整内容", needVip: true });
+    }
     const detail = getSalaryReportDetail(req.session.phone, Number(req.params.id));
     if (!detail) return res.status(404).json({ error: "记录不存在" });
     res.json(detail);

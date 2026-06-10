@@ -12,7 +12,7 @@ const fmtTime = (ts) => {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
 };
 
-export default function History({ onBack }) {
+export default function History({ isVip = false, onBack }) {
   const [items, setItems] = useState(null);
   const [detail, setDetail] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
@@ -25,11 +25,18 @@ export default function History({ onBack }) {
   }, []);
 
   const openDetail = async (id) => {
+    if (!isVip) {
+      setSnack({ open: true, msg: '开通 VIP 后可查看历史报告完整内容', severity: 'warning' });
+      return;
+    }
     setDetailLoading(true);
     try {
       setDetail(await fetchSalaryDetail(id));
-    } catch {
+    } catch (err) {
       setDetail(null);
+      if (err?.status === 403 || err?.data?.needVip) {
+        setSnack({ open: true, msg: err?.data?.error || '开通 VIP 后可查看历史报告完整内容', severity: 'warning' });
+      }
     } finally {
       setDetailLoading(false);
     }
