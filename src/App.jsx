@@ -364,11 +364,7 @@ function App() {
           </Box>
         )}
 
-        <Box component="footer" sx={{ textAlign: 'center', mt: 5, pb: 3 }}>
-          <Box sx={{ fontSize: '0.72rem', color: 'var(--ink-3)', letterSpacing: '0.04em' }}>
-            谨世 ATA 薪酬查询平台
-          </Box>
-        </Box>
+        <Box sx={{ mt: 5, pb: 3 }} />
       </Container>
       <BottomNav
         active={view === 'history' ? 'records' : view === 'home' ? 'home' : 'mine'}
