@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, TextField, Button, Alert } from '@mui/material';
+import { Box, TextField, Button, Alert, Checkbox } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import { sendSmsCode, verifySmsCode } from '../utils/api';
 
@@ -22,12 +22,13 @@ export default function LoginForm({ onLoggedIn }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [info, setInfo] = useState(null);
+  const [agreed, setAgreed] = useState(false);
   const timerRef = useRef(null);
 
   const phoneValid = PHONE_RE.test(phone);
   const codeValid = /^\d{6}$/.test(code);
   const canSend = phoneValid && !sending && countdown === 0;
-  const canSubmit = phoneValid && codeValid && !loading;
+  const canSubmit = phoneValid && codeValid && !loading && agreed;
 
   useEffect(() => () => clearInterval(timerRef.current), []);
 
@@ -91,6 +92,13 @@ export default function LoginForm({ onLoggedIn }) {
       '&.Mui-focused fieldset': { borderColor: ACCENT, borderWidth: '1.5px' },
     },
     '& input': { fontSize: '0.95rem' },
+  };
+
+  // 协议/隐私在 ata100 子路径下用 ?legal= 打开（新标签，不打断正在填的手机号/验证码）
+  const legalUrl = (type) => `${import.meta.env.BASE_URL.replace(/\/$/, '')}/?legal=${type}`;
+  const legalLinkSx = {
+    color: ACCENT, fontWeight: 600, textDecoration: 'none',
+    '&:hover': { textDecoration: 'underline' },
   };
 
   return (
@@ -169,6 +177,23 @@ export default function LoginForm({ onLoggedIn }) {
 
       {info && <Alert severity="info" sx={{ borderRadius: 2.5, py: 0.5, alignItems: 'center' }}>{info}</Alert>}
       {error && <Alert severity="error" sx={{ borderRadius: 2.5, py: 0.5, alignItems: 'center' }}>{error}</Alert>}
+
+      {/* 同意协议勾选：必须勾选才能登录（已并入 canSubmit）*/}
+      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 0.75, mt: 0.25, px: 0.25 }}>
+        <Checkbox
+          checked={agreed}
+          onChange={(e) => setAgreed(e.target.checked)}
+          disabled={loading}
+          size="small"
+          sx={{ p: 0, mt: '1px', color: 'rgba(15,118,110,0.45)', '&.Mui-checked': { color: ACCENT } }}
+        />
+        <Box sx={{ fontSize: '0.8rem', color: 'var(--ink-2)', lineHeight: 1.5 }}>
+          我已阅读并同意
+          <Box component="a" href={legalUrl('terms')} target="_blank" rel="noopener noreferrer" sx={legalLinkSx}>服务使用协议</Box>
+          和
+          <Box component="a" href={legalUrl('privacy')} target="_blank" rel="noopener noreferrer" sx={legalLinkSx}>隐私政策</Box>
+        </Box>
+      </Box>
 
       <Button
         type="submit"

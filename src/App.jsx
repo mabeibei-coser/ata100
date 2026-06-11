@@ -15,6 +15,7 @@ import './styles/index.css'
 import homeHeroDesktop from './assets/home-ata-hero-desktop.png'
 import homeHeroMobile from './assets/home-ata-hero-mobile.png'
 import LoginForm from './components/LoginForm'
+import LegalView from './components/LegalView'
 import Billing from './components/Billing'
 import Profile from './components/Profile'
 import History from './components/History'
@@ -134,12 +135,12 @@ function App() {
             <Box className="brand-mark brand-mark-lg" sx={{ mx: 'auto', mb: 2 }}>
               <PaidOutlinedIcon sx={{ fontSize: 28 }} />
             </Box>
-            <div className="h-eyebrow" style={{ marginBottom: 8 }}>ata · 薪酬域会员中心</div>
+            <div className="h-eyebrow" style={{ marginBottom: 8 }}>登录ATA · 薪酬域</div>
             <h1 className="h-display" style={{ fontSize: '1.52rem', lineHeight: 1.18, marginBottom: 8 }}>
               查薪酬 · 看全景
             </h1>
             <p style={{ color: 'var(--ink-2)', fontSize: '0.84rem', lineHeight: 1.55, maxWidth: 280, margin: '0 auto' }}>
-              输入手机号 · 60 秒内收到验证码 · 登录态全域通用
+              全行业薪资数据 · 岗位智能分析 · 当前年月更新
             </p>
           </Box>
           <LoginForm onLoggedIn={handleLoggedIn} />
@@ -580,4 +581,17 @@ function Dot() {
   return <Box sx={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ink-4)' }} />
 }
 
-export default App
+// ?legal=terms|privacy → 独立的协议/隐私查看页（无需登录，登录页勾选项新标签打开）
+function getLegalType() {
+  if (typeof window === 'undefined') return null
+  const t = new URLSearchParams(window.location.search).get('legal')
+  return t === 'terms' || t === 'privacy' ? t : null
+}
+
+function Root() {
+  const legalType = getLegalType()
+  if (legalType) return <LegalView type={legalType} />
+  return <App />
+}
+
+export default Root

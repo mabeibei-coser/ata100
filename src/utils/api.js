@@ -44,6 +44,9 @@ export const fetchPackages = () => http('GET', '/packages');
 export const fetchHistory = () => http('GET', '/me/history');
 export const fetchSalaryDetail = (id) => http('GET', `/me/history/salary/${id}`);
 
+// ── 法律文档（公开：服务使用协议 terms / 隐私政策 privacy）──
+export const fetchLegal = (type) => http('GET', `/legal/${type}`);
+
 // ── 支付 ──
 // 下单。返回 { outTradeNo, jsapi, fakeMode } 或抛 needOauth 错误（401，data.redirectTo）。
 export const createOrder = (packageId, from = '/') => http('POST', '/pay/wechat/order', { packageId, from });

@@ -189,6 +189,32 @@ app.get("/api/packages", (req, res) => {
   res.json({ packages: listPackages() });
 });
 
+// ════════════ 法律文档（公开）════════════
+// 服务使用协议 / 隐私政策正文，由后台「系统设置」录入到 site_settings。
+// 登录页勾选项的两个链接 + LegalView 读这里；未配置时返回空串（前台显示占位）。
+const LEGAL_DOCS = {
+  terms: { key: "legal_terms", title: "服务使用协议" },
+  privacy: { key: "legal_privacy", title: "隐私政策" },
+};
+app.get("/api/legal/:type", (req, res) => {
+  const doc = LEGAL_DOCS[req.params.type];
+  if (!doc) return res.status(404).json({ error: "文档不存在" });
+  let row = null;
+  try {
+    row = getDb()
+      .prepare("SELECT value, updated_at FROM site_settings WHERE key = ?")
+      .get(doc.key);
+  } catch {
+    row = null; // 表尚未建（极早期）→ 视为空内容
+  }
+  res.json({
+    type: req.params.type,
+    title: doc.title,
+    content: row?.value || "",
+    updatedAt: row?.updated_at || 0,
+  });
+});
+
 // ════════════ 我的历史（只读聚合各业务积木的记录）════════════
 
 app.get(
