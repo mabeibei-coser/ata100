@@ -22,7 +22,7 @@ const daysLeft = (ts) => {
  * 个人中心：VIP 状态卡 + 两个快捷入口（历史记录 / 支付记录）。
  * 支付记录抽到独立视图 Payments，点击按钮路由进入。
  */
-export default function Profile({ membership, onBuy, onBack, onGoHistory, onGoPayments }) {
+export default function Profile({ membership, onBuy, onBack, onGoHistory, onGoPayments, onLogout }) {
   const isVip = membership?.isVip;
   const left = isVip ? daysLeft(membership.vipExpireAt) : 0;
 
@@ -158,6 +158,30 @@ export default function Profile({ membership, onBuy, onBack, onGoHistory, onGoPa
           onClick={onGoPayments}
         />
       </Box>
+
+      {/* 低调的退出登录入口 */}
+      {onLogout && (
+        <Box sx={{ textAlign: 'center', mt: 4, mb: 2 }}>
+          <Box
+            component="button"
+            type="button"
+            onClick={onLogout}
+            sx={{
+              background: 'none',
+              border: 0,
+              padding: '6px 12px',
+              cursor: 'pointer',
+              fontSize: '0.82rem',
+              color: 'var(--ink-3)',
+              fontFamily: 'inherit',
+              transition: 'color .2s ease',
+              '&:hover': { color: 'var(--ink-2)' },
+            }}
+          >
+            退出登录
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 }

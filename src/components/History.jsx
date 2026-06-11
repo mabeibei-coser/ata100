@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Stack, CircularProgress, IconButton, Snackbar, Alert } from '@mui/material';
+import { Box, Stack, CircularProgress, IconButton, Snackbar, Alert, Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { fetchHistory, fetchSalaryDetail } from '../utils/api';
 
 const fmtTime = (ts) => {
@@ -12,10 +13,11 @@ const fmtTime = (ts) => {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
 };
 
-export default function History({ onBack }) {
+export default function History({ onBack, isVip, onGoBilling }) {
   const [items, setItems] = useState(null);
   const [detail, setDetail] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [vipPromptOpen, setVipPromptOpen] = useState(false);
   const [snack, setSnack] = useState({ open: false, msg: '', severity: 'info' });
 
   useEffect(() => {
@@ -23,6 +25,11 @@ export default function History({ onBack }) {
       .then((d) => { setItems(d.items); })
       .catch(() => setItems([]));
   }, []);
+
+  const tryOpenDetail = (id) => {
+    if (!isVip) { setVipPromptOpen(true); return; }
+    openDetail(id);
+  };
 
   const openDetail = async (id) => {
     setDetailLoading(true);
@@ -143,10 +150,10 @@ export default function History({ onBack }) {
           {items.map((it) => (
             <Box
               key={`${it.source}-${it.id}`}
-              onClick={() => openDetail(it.id)}
+              onClick={() => tryOpenDetail(it.id)}
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(it.id); } }}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tryOpenDetail(it.id); } }}
               sx={{
                 p: 1.75,
                 cursor: 'pointer',
@@ -178,12 +185,20 @@ export default function History({ onBack }) {
                   {fmtTime(it.createdAt)}
                 </Box>
               </Box>
-              <ChevronRightIcon className="chevron" sx={{
-                fontSize: 18,
-                color: 'var(--ink-4)',
-                flexShrink: 0,
-                transition: 'transform .2s ease, color .2s ease',
-              }} />
+              {isVip ? (
+                <ChevronRightIcon className="chevron" sx={{
+                  fontSize: 18,
+                  color: 'var(--ink-4)',
+                  flexShrink: 0,
+                  transition: 'transform .2s ease, color .2s ease',
+                }} />
+              ) : (
+                <LockOutlinedIcon sx={{
+                  fontSize: 16,
+                  color: 'var(--ink-4)',
+                  flexShrink: 0,
+                }} />
+              )}
             </Box>
           ))}
         </Stack>
@@ -194,6 +209,41 @@ export default function History({ onBack }) {
           <CircularProgress size={18} sx={{ color: 'var(--accent)' }} />
         </Box>
       )}
+
+      <Snackbar
+        open={vipPromptOpen}
+        autoHideDuration={5000}
+        onClose={() => setVipPromptOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        sx={{ bottom: { xs: 92, sm: 100 } }}
+      >
+        <Alert
+          severity="info"
+          variant="filled"
+          onClose={() => setVipPromptOpen(false)}
+          sx={{ borderRadius: 'var(--r-sm)', alignItems: 'center' }}
+          action={
+            <Button
+              size="small"
+              onClick={() => { setVipPromptOpen(false); onGoBilling?.(); }}
+              sx={{
+                color: '#fff',
+                fontWeight: 700,
+                fontSize: '0.78rem',
+                textTransform: 'none',
+                border: '1px solid rgba(255,255,255,0.5)',
+                px: 1.25,
+                ml: 1,
+                '&:hover': { background: 'rgba(255,255,255,0.12)' },
+              }}
+            >
+              开通 VIP
+            </Button>
+          }
+        >
+          查看历史报告需开通 VIP
+        </Alert>
+      </Snackbar>
 
       <Snackbar open={snack.open} autoHideDuration={4000} onClose={closeSnack} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
         <Alert severity={snack.severity} variant="filled" onClose={closeSnack} sx={{ borderRadius: 'var(--r-sm)' }}>
