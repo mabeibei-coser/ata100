@@ -36,6 +36,12 @@ const daysLeft = (ts) => {
 // 手机号中间 4 位打码：18621933756 → 186****3756
 const maskPhone = (p) => (p ? String(p).replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : p)
 
+// 数据更新标签：始终显示当前真实年月（如「2026年6月」），随系统时间自动走
+const currentMonthLabel = () => {
+  const d = new Date()
+  return `${d.getFullYear()}年${d.getMonth() + 1}月`
+}
+
 // 岗位全景文档入口：A800 文档库（一库管两域，部署在 /a800/），按 category=人才ATA 过滤出薪酬域文档
 const DOC_LIB_ATA_URL = '/a800/?category=' + encodeURIComponent('人才ATA')
 
@@ -131,17 +137,37 @@ function App() {
               <ArrowBackIcon sx={{ fontSize: 18 }} />
             </IconButton>
           </Box>
-          <Box sx={{ textAlign: 'center', mb: 2.5 }}>
-            <Box className="brand-mark brand-mark-lg" sx={{ mx: 'auto', mb: 2 }}>
-              <PaidOutlinedIcon sx={{ fontSize: 28 }} />
+          <Box sx={{ textAlign: 'center', mb: 3 }}>
+            {/* logo + 柔光晕：品牌方块浮在一圈青绿微光上，更有质感 */}
+            <Box sx={{ position: 'relative', width: 'fit-content', mx: 'auto', mb: 2.25 }}>
+              <Box aria-hidden sx={{
+                position: 'absolute', inset: -12, borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(15,118,110,0.20), transparent 70%)',
+                filter: 'blur(10px)', zIndex: 0,
+              }} />
+              <Box className="brand-mark brand-mark-lg" sx={{ position: 'relative', zIndex: 1 }}>
+                <PaidOutlinedIcon sx={{ fontSize: 28 }} />
+              </Box>
             </Box>
-            <div className="h-eyebrow" style={{ marginBottom: 8 }}>登录ATA · 薪酬域</div>
-            <h1 className="h-display" style={{ fontSize: '1.52rem', lineHeight: 1.18, marginBottom: 8 }}>
+            <div className="h-eyebrow" style={{ marginBottom: 10 }}>登录ATA · 薪酬域</div>
+            <h1 className="h-display" style={{ fontSize: '1.62rem', lineHeight: 1.14, marginBottom: 10 }}>
               查薪酬 · 看全景
             </h1>
-            <p style={{ color: 'var(--ink-2)', fontSize: '0.84rem', lineHeight: 1.55, maxWidth: 280, margin: '0 auto' }}>
-              全行业薪资数据 · 岗位智能分析 · 当前年月更新
+            <p style={{ color: 'var(--ink-2)', fontSize: '0.86rem', lineHeight: 1.5, margin: '0 auto' }}>
+              全行业薪资数据 · 岗位智能分析
             </p>
+            {/* 数据新鲜度药丸：呼吸绿点 + 当前年月，传达「每月更新」的可信感 */}
+            <Box sx={{
+              display: 'inline-flex', alignItems: 'center', gap: 0.7,
+              mt: 1.6, px: 1.3, py: 0.5, borderRadius: 999,
+              background: 'var(--accent-soft)', border: '1px solid rgba(15,118,110,0.18)',
+              color: 'var(--accent-ink)', fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.01em',
+            }}>
+              <Box aria-hidden className="pulse-dot" sx={{
+                width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)',
+              }} />
+              数据更新至 {currentMonthLabel()}
+            </Box>
           </Box>
           <LoginForm onLoggedIn={handleLoggedIn} />
         </Container>
