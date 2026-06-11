@@ -35,7 +35,8 @@ const OAUTH_CALLBACK_PATH = "/api/wechat/oauth/callback";
 const DEV_PAY_ENABLED = process.env.NODE_ENV !== "production" || process.env.ATA_DEV_PAY === "true";
 
 const app = express();
-app.set("trust proxy", true);
+// 只信最近一跳（本机 nginx）：true 会取 X-Forwarded-For 最左值，客户端可伪造绕过 IP 限频
+app.set("trust proxy", 1);
 
 // notify 路由要原始 bytes 验签，跳过全局 json；其余路由走 json。
 app.use((req, res, next) => {
@@ -74,7 +75,7 @@ app.post("/api/sms/send", async (req, res) => {
     return res.status(429).json({ error: tip });
   }
   try {
-    const code = String(Math.floor(100000 + Math.random() * 900000));
+    const code = String(crypto.randomInt(100000, 1000000)); // CSPRNG；Math.random 输出可被推算
     const codeHash = await bcrypt.hash(code, 10);
     const now = Date.now();
     getDb()
@@ -197,7 +198,10 @@ const LEGAL_DOCS = {
   privacy: { key: "legal_privacy", title: "隐私政策" },
 };
 app.get("/api/legal/:type", (req, res) => {
-  const doc = LEGAL_DOCS[req.params.type];
+  // hasOwnProperty 守门：防 __proto__/constructor 命中原型链（同 packages.js getPackage 写法）
+  const doc = Object.prototype.hasOwnProperty.call(LEGAL_DOCS, req.params.type)
+    ? LEGAL_DOCS[req.params.type]
+    : null;
   if (!doc) return res.status(404).json({ error: "文档不存在" });
   let row = null;
   try {
@@ -315,14 +319,20 @@ app.post(NOTIFY_PATH, express.raw({ type: "*/*" }), async (req, res) => {
   }
   try {
     const db = getDb();
-    const { outTradeNo, tradeState } = result.resource;
+    const { outTradeNo, tradeState, raw } = result.resource;
     if (tradeState !== "SUCCESS") {
       return res.status(200).json({ code: "SUCCESS", message: "OK" }); // 非成功也回 200，避免微信重推
     }
-    const order = db.prepare("SELECT out_trade_no, status FROM orders WHERE out_trade_no = ?").get(outTradeNo);
+    const order = db.prepare("SELECT out_trade_no, status, amount_cents FROM orders WHERE out_trade_no = ?").get(outTradeNo);
     if (!order) {
       console.error("[pay/notify] order not found:", outTradeNo);
       return res.status(200).json({ code: "SUCCESS", message: "OK" });
+    }
+    // 纵深防御：解密载荷里的实付金额必须与订单一致（防串单/商户配置事故入账）
+    const paidTotal = raw?.amount?.total;
+    if (typeof paidTotal === "number" && paidTotal !== order.amount_cents) {
+      console.error("[pay/notify] 金额不符拒绝入账:", outTradeNo, "paid=", paidTotal, "order=", order.amount_cents);
+      return res.status(500).json({ code: "FAIL", message: "amount mismatch" });
     }
     if (order.status !== "paid") {
       db.prepare("UPDATE orders SET status = 'paid', paid_at = ? WHERE out_trade_no = ?").run(Date.now(), outTradeNo);
