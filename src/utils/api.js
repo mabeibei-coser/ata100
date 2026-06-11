@@ -42,7 +42,6 @@ export const fetchPackages = () => http('GET', '/packages');
 
 // ── 我的历史 ──
 export const fetchHistory = () => http('GET', '/me/history');
-export const fetchSalaryDetail = (id) => http('GET', `/me/history/salary/${id}`);
 
 // ── 法律文档（公开：服务使用协议 terms / 隐私政策 privacy）──
 export const fetchLegal = (type) => http('GET', `/legal/${type}`);
