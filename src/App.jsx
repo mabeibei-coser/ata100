@@ -366,10 +366,15 @@ function App() {
 }
 
 function HomeLanding({ onGoIdentify, onGoResources, onGoHistory, onGoProfile }) {
+  const currentYear = new Date().getFullYear()
   return (
     <Box className="home-page">
       <main className="home-shell rise">
         <header className="home-title-wrap">
+          <div className="home-data-version" aria-label="数据更新月份">
+            <span className="home-data-version-dot" aria-hidden />
+            大数据库版本 {currentMonthLabel()}
+          </div>
           <h1 className="home-title">
             <span className="home-title-main">岗位薪资查询平台</span>
             <span className="home-title-version"><em>5.0</em><span className="home-title-badge">专业版</span></span>
@@ -391,6 +396,10 @@ function HomeLanding({ onGoIdentify, onGoResources, onGoHistory, onGoProfile }) 
             />
           </section>
         </section>
+
+        <footer className="home-footer-line">
+          ATA大数据中心 2013-{currentYear} · 沪ICP备2023040758号-1
+        </footer>
 
         <BottomNav active="home" onGoHome={() => {}} onGoHistory={onGoHistory} onGoProfile={onGoProfile} />
       </main>
