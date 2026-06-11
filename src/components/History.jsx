@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Stack, CircularProgress, IconButton, Snackbar, Alert, Button } from '@mui/material';
+import { Box, Stack, CircularProgress, IconButton, Snackbar, Alert, Button, Dialog } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { fetchHistory, fetchSalaryDetail } from '../utils/api';
 
 const fmtTime = (ts) => {
@@ -210,40 +211,74 @@ export default function History({ onBack, isVip, onGoBilling }) {
         </Box>
       )}
 
-      <Snackbar
+      <Dialog
         open={vipPromptOpen}
-        autoHideDuration={5000}
         onClose={() => setVipPromptOpen(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        sx={{ bottom: { xs: 92, sm: 100 } }}
+        PaperProps={{
+          sx: {
+            borderRadius: 'var(--r-lg)',
+            maxWidth: 320,
+            width: 'calc(100% - 48px)',
+            m: 0,
+            overflow: 'hidden',
+          },
+        }}
       >
-        <Alert
-          severity="info"
-          variant="filled"
-          onClose={() => setVipPromptOpen(false)}
-          sx={{ borderRadius: 'var(--r-sm)', alignItems: 'center' }}
-          action={
+        <Box sx={{ p: 3, textAlign: 'center' }}>
+          <Box sx={{
+            width: 56, height: 56,
+            borderRadius: '50%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'linear-gradient(135deg, rgba(176,138,62,0.18) 0%, rgba(176,138,62,0.08) 100%)',
+            color: 'var(--gold)',
+            mx: 'auto', mb: 2,
+          }}>
+            <WorkspacePremiumIcon sx={{ fontSize: 30 }} />
+          </Box>
+          <Box sx={{
+            fontSize: '1.05rem', fontWeight: 700, color: 'var(--ink)',
+            lineHeight: 1.35, letterSpacing: '-0.012em', mb: 1,
+          }}>
+            查看历史报告需开通 VIP
+          </Box>
+          <Box sx={{
+            fontSize: '0.85rem', color: 'var(--ink-2)',
+            lineHeight: 1.6, mb: 2.5,
+          }}>
+            开通 VIP 后可查看全部历史查询的完整薪酬分析报告
+          </Box>
+          <Box sx={{ display: 'flex', gap: 1.25 }}>
             <Button
-              size="small"
-              onClick={() => { setVipPromptOpen(false); onGoBilling?.(); }}
+              onClick={() => setVipPromptOpen(false)}
+              disableElevation
+              fullWidth
               sx={{
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: '0.78rem',
+                py: 1.1, fontSize: '0.88rem', fontWeight: 600,
+                borderRadius: 'var(--r-sm)',
+                color: 'var(--ink-2)',
+                background: 'var(--bg-mute)',
                 textTransform: 'none',
-                border: '1px solid rgba(255,255,255,0.5)',
-                px: 1.25,
-                ml: 1,
-                '&:hover': { background: 'rgba(255,255,255,0.12)' },
+                '&:hover': { background: 'var(--line)' },
               }}
             >
-              开通 VIP
+              稍后
             </Button>
-          }
-        >
-          查看历史报告需开通 VIP
-        </Alert>
-      </Snackbar>
+            <Button
+              onClick={() => { setVipPromptOpen(false); onGoBilling?.(); }}
+              disableElevation
+              fullWidth
+              className="btn-gold"
+              sx={{
+                py: 1.1, fontSize: '0.88rem', fontWeight: 700,
+                borderRadius: 'var(--r-sm)',
+                textTransform: 'none',
+              }}
+            >
+              立即开通
+            </Button>
+          </Box>
+        </Box>
+      </Dialog>
 
       <Snackbar open={snack.open} autoHideDuration={4000} onClose={closeSnack} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
         <Alert severity={snack.severity} variant="filled" onClose={closeSnack} sx={{ borderRadius: 'var(--r-sm)' }}>
