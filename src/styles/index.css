@@ -2557,6 +2557,7 @@ body::before {
   position: relative;
   overflow: hidden;
   isolation: isolate;
+  transform: translateY(-2.8dvh);
 }
 
 .ata-desktop-stage {
@@ -2599,6 +2600,63 @@ body::before {
   background: rgba(255, 255, 255, 0.03);
 }
 
+.ata-title-cover,
+.ata-version-cover,
+.ata-pro-badge {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ata-title-cover,
+.ata-version-cover {
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 70% 50%, rgba(17, 89, 151, 0.18), transparent 62%),
+    linear-gradient(90deg, rgba(1, 10, 25, 0.98), rgba(3, 18, 43, 0.92));
+  box-shadow: 0 0 26px rgba(1, 10, 25, 0.42);
+}
+
+.ata-version-cover-desktop {
+  left: 5.2%;
+  top: 6.1%;
+  width: 16.8%;
+  height: 4.6%;
+}
+
+.ata-title-cover-desktop {
+  left: 44.2%;
+  top: 20.2%;
+  width: 15.4%;
+  height: 9.6%;
+}
+
+.ata-pro-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #e9fbff;
+  font-family: 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: 0;
+  background:
+    linear-gradient(135deg, rgba(14, 196, 255, 0.88), rgba(77, 234, 221, 0.82));
+  border: 1px solid rgba(168, 245, 255, 0.72);
+  box-shadow:
+    0 0 18px rgba(64, 219, 255, 0.38),
+    inset 0 0 12px rgba(255, 255, 255, 0.16);
+  text-shadow: 0 2px 8px rgba(0, 15, 38, 0.58);
+}
+
+.ata-pro-badge-desktop {
+  left: 43.3%;
+  top: 19.35%;
+  width: 5.3%;
+  height: 3.5%;
+  border-radius: 999px 999px 999px 3px;
+  font-size: clamp(13px, 1.18vw, 22px);
+}
+
 .ata-desktop-salary {
   left: 13.02%;
   top: 68.42%;
@@ -2632,6 +2690,33 @@ body::before {
     display: block;
     flex: 0 0 100vw;
     max-width: none;
+  }
+
+  .ata-design-stage {
+    transform: translateY(-3.4dvh);
+  }
+
+  .ata-version-cover-mobile {
+    left: 2.6%;
+    top: 1.2%;
+    width: 34.8%;
+    height: 2.8%;
+  }
+
+  .ata-title-cover-mobile {
+    left: 73.6%;
+    top: 11.35%;
+    width: 24.2%;
+    height: 5.0%;
+  }
+
+  .ata-pro-badge-mobile {
+    left: 68.7%;
+    top: 10.95%;
+    width: 14.2%;
+    height: 2.35%;
+    border-radius: 999px 999px 999px 3px;
+    font-size: clamp(10px, 2.8vw, 15px);
   }
 
   .ata-hotspot {

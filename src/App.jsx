@@ -392,6 +392,9 @@ function HomeLanding({ onGoIdentify, onGoResources, onGoHistory, onGoProfile }) 
           alt="岗位薪资查询平台5.0 专业版电脑版首页"
           draggable="false"
         />
+        <span className="ata-title-cover ata-title-cover-desktop" aria-hidden />
+        <span className="ata-version-cover ata-version-cover-desktop" aria-hidden />
+        <span className="ata-pro-badge ata-pro-badge-desktop" aria-hidden>专业版</span>
         <button className="ata-hotspot ata-desktop-salary" type="button" aria-label="薪资查询" onClick={onGoIdentify} />
         <button className="ata-hotspot ata-desktop-panorama" type="button" aria-label="岗位全景" onClick={onGoResources} />
       </main>
@@ -403,6 +406,9 @@ function HomeLanding({ onGoIdentify, onGoResources, onGoHistory, onGoProfile }) 
           alt="岗位薪资查询平台5.0 专业版手机版首页"
           draggable="false"
         />
+        <span className="ata-title-cover ata-title-cover-mobile" aria-hidden />
+        <span className="ata-version-cover ata-version-cover-mobile" aria-hidden />
+        <span className="ata-pro-badge ata-pro-badge-mobile" aria-hidden>专业版</span>
         <button className="ata-hotspot ata-mobile-salary" type="button" aria-label="薪资查询" onClick={onGoIdentify} />
         <button className="ata-hotspot ata-mobile-panorama" type="button" aria-label="岗位全景" onClick={onGoResources} />
         <button className="ata-hotspot ata-mobile-home" type="button" aria-label="首页" />

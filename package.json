@@ -1,7 +1,7 @@
 {
   "name": "ata100",
   "private": true,
-  "version": "0.1.50",
+  "version": "0.1.51",
   "type": "module",
   "description": "岗位薪资查询平台 5.0 专业版 - 薪资查询 + 短信登录 + VIP 会员 + 岗位全景文档",
   "scripts": {
