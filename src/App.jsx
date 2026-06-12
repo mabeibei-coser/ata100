@@ -14,6 +14,8 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
 import './styles/index.css'
 import homeHeroDesktop from './assets/home-ata-hero-desktop.png'
 import homeHeroMobile from './assets/home-ata-hero-mobile.png'
+import salaryHomeDesktop from './assets/salary-platform-desktop-final.png'
+import salaryHomeMobile from './assets/salary-platform-mobile-final.png'
 import LoginForm from './components/LoginForm'
 import LegalView from './components/LegalView'
 import Billing from './components/Billing'
@@ -381,42 +383,31 @@ function App() {
 }
 
 function HomeLanding({ onGoIdentify, onGoResources, onGoHistory, onGoProfile }) {
-  const currentYear = new Date().getFullYear()
   return (
-    <Box className="home-page">
-      <main className="home-shell rise">
-        <header className="home-title-wrap">
-          <div className="home-data-version" aria-label="数据更新月份">
-            <span className="home-data-version-dot" aria-hidden />
-            大数据库版本 {currentMonthLabel()}
-          </div>
-          <h1 className="home-title">
-            <span className="home-title-main">岗位薪资查询平台</span>
-            <span className="home-title-version"><em>5.0</em><span className="home-title-badge">专业版</span></span>
-          </h1>
-        </header>
+    <Box className="ata-home-page">
+      <main className="ata-design-stage ata-desktop-stage" aria-label="岗位薪资查询平台5.0 专业版电脑版首页">
+        <img
+          className="ata-design-image"
+          src={salaryHomeDesktop}
+          alt="岗位薪资查询平台5.0 专业版电脑版首页"
+          draggable="false"
+        />
+        <button className="ata-hotspot ata-desktop-salary" type="button" aria-label="薪资查询" onClick={onGoIdentify} />
+        <button className="ata-hotspot ata-desktop-panorama" type="button" aria-label="岗位全景" onClick={onGoResources} />
+      </main>
 
-        <section className="home-visual-stage" aria-label="薪酬查询与岗位全景">
-          <HomeHeroArt />
-          <section className="home-actions" aria-label="主要功能">
-            <HomeActionCard
-              icon={<SalarySearchIcon />}
-              label="薪资查询"
-              onClick={onGoIdentify}
-            />
-            <HomeActionCard
-              icon={<DocsFolderIcon />}
-              label="岗位全景"
-              onClick={onGoResources}
-            />
-          </section>
-        </section>
-
-        <footer className="home-footer-line">
-          ATA大数据中心 2013-{currentYear} · 沪ICP备2023040758号-1
-        </footer>
-
-        <BottomNav active="home" onGoHome={() => {}} onGoHistory={onGoHistory} onGoProfile={onGoProfile} />
+      <main className="ata-design-stage ata-mobile-stage" aria-label="岗位薪资查询平台5.0 专业版手机版首页">
+        <img
+          className="ata-design-image"
+          src={salaryHomeMobile}
+          alt="岗位薪资查询平台5.0 专业版手机版首页"
+          draggable="false"
+        />
+        <button className="ata-hotspot ata-mobile-salary" type="button" aria-label="薪资查询" onClick={onGoIdentify} />
+        <button className="ata-hotspot ata-mobile-panorama" type="button" aria-label="岗位全景" onClick={onGoResources} />
+        <button className="ata-hotspot ata-mobile-home" type="button" aria-label="首页" />
+        <button className="ata-hotspot ata-mobile-records" type="button" aria-label="记录" onClick={onGoHistory} />
+        <button className="ata-hotspot ata-mobile-profile" type="button" aria-label="我的" onClick={onGoProfile} />
       </main>
     </Box>
   )

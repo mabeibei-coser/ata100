@@ -2540,3 +2540,136 @@ body::before {
     object-fit: contain;
   }
 }
+
+/* Final 2026-06 home design: pixel-locked desktop/mobile artwork with live hotspots. */
+.ata-home-page {
+  width: 100%;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 70% 45%, rgba(22, 111, 194, 0.16), transparent 34%),
+    #020b1b;
+}
+
+.ata-design-stage {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.ata-desktop-stage {
+  width: min(100vw, calc(100dvh * 16 / 9));
+  aspect-ratio: 16 / 9;
+}
+
+.ata-mobile-stage {
+  display: none;
+  width: 100vw;
+  aspect-ratio: 853 / 1844;
+}
+
+.ata-design-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
+.ata-hotspot {
+  position: absolute;
+  z-index: 2;
+  border: 0;
+  border-radius: 18px;
+  padding: 0;
+  color: transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+.ata-hotspot:focus-visible {
+  outline: 2px solid rgba(124, 232, 255, 0.78);
+  outline-offset: 4px;
+}
+
+.ata-hotspot:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.ata-desktop-salary {
+  left: 13.02%;
+  top: 68.42%;
+  width: 30.62%;
+  height: 19.72%;
+}
+
+.ata-desktop-panorama {
+  left: 45.42%;
+  top: 68.42%;
+  width: 30.62%;
+  height: 19.72%;
+}
+
+@media (max-width: 767px), (max-aspect-ratio: 3 / 4) {
+  .ata-home-page {
+    min-height: 100dvh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #ffffff;
+  }
+
+  .ata-desktop-stage {
+    display: none;
+  }
+
+  .ata-mobile-stage {
+    display: block;
+    flex: 0 0 100vw;
+    max-width: none;
+  }
+
+  .ata-hotspot {
+    border-radius: 12px;
+  }
+
+  .ata-mobile-salary {
+    left: 7.74%;
+    top: 42.84%;
+    width: 84.4%;
+    height: 11.28%;
+  }
+
+  .ata-mobile-panorama {
+    left: 7.74%;
+    top: 55.91%;
+    width: 84.4%;
+    height: 11.28%;
+  }
+
+  .ata-mobile-home {
+    left: 0;
+    top: 88.98%;
+    width: 33.33%;
+    height: 7.5%;
+  }
+
+  .ata-mobile-records {
+    left: 33.33%;
+    top: 88.98%;
+    width: 33.33%;
+    height: 7.5%;
+  }
+
+  .ata-mobile-profile {
+    left: 66.66%;
+    top: 88.98%;
+    width: 33.34%;
+    height: 7.5%;
+  }
+}
