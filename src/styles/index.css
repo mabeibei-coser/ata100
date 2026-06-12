@@ -2610,11 +2610,11 @@ body::before {
 
 .ata-title-cover,
 .ata-version-cover {
-  border-radius: 10px;
+  border-radius: 8px;
   background:
-    radial-gradient(circle at 70% 50%, rgba(17, 89, 151, 0.18), transparent 62%),
-    linear-gradient(90deg, rgba(1, 10, 25, 0.98), rgba(3, 18, 43, 0.92));
-  box-shadow: 0 0 26px rgba(1, 10, 25, 0.42);
+    radial-gradient(circle at 70% 50%, rgba(16, 83, 143, 0.14), transparent 60%),
+    linear-gradient(90deg, rgba(0, 9, 24, 0.99), rgba(2, 18, 43, 0.985));
+  box-shadow: 0 0 34px rgba(1, 10, 25, 0.56);
 }
 
 .ata-version-cover-desktop {
@@ -2625,36 +2625,37 @@ body::before {
 }
 
 .ata-title-cover-desktop {
-  left: 44.2%;
-  top: 20.2%;
-  width: 15.4%;
-  height: 9.6%;
+  left: 44.8%;
+  top: 20.0%;
+  width: 17.2%;
+  height: 9.8%;
 }
 
 .ata-pro-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #e9fbff;
+  color: rgba(222, 247, 255, 0.96);
   font-family: 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
-  font-weight: 900;
-  letter-spacing: 0;
+  font-weight: 800;
+  letter-spacing: 0.02em;
   background:
-    linear-gradient(135deg, rgba(14, 196, 255, 0.88), rgba(77, 234, 221, 0.82));
-  border: 1px solid rgba(168, 245, 255, 0.72);
+    linear-gradient(180deg, rgba(7, 43, 84, 0.72), rgba(3, 22, 50, 0.66));
+  border: 1px solid rgba(112, 211, 255, 0.5);
   box-shadow:
-    0 0 18px rgba(64, 219, 255, 0.38),
-    inset 0 0 12px rgba(255, 255, 255, 0.16);
-  text-shadow: 0 2px 8px rgba(0, 15, 38, 0.58);
+    0 0 12px rgba(55, 170, 255, 0.22),
+    inset 0 0 10px rgba(112, 211, 255, 0.12);
+  text-shadow: 0 1px 6px rgba(0, 10, 28, 0.72);
+  backdrop-filter: blur(8px);
 }
 
 .ata-pro-badge-desktop {
-  left: 43.3%;
-  top: 19.35%;
-  width: 5.3%;
-  height: 3.5%;
-  border-radius: 999px 999px 999px 3px;
-  font-size: clamp(13px, 1.18vw, 22px);
+  left: 45.65%;
+  top: 17.9%;
+  width: 4.85%;
+  height: 2.95%;
+  border-radius: 999px;
+  font-size: clamp(11px, 0.92vw, 18px);
 }
 
 .ata-desktop-salary {
@@ -2704,19 +2705,19 @@ body::before {
   }
 
   .ata-title-cover-mobile {
-    left: 73.6%;
-    top: 11.35%;
-    width: 24.2%;
-    height: 5.0%;
+    left: 74.0%;
+    top: 11.15%;
+    width: 25.5%;
+    height: 5.25%;
   }
 
   .ata-pro-badge-mobile {
-    left: 68.7%;
-    top: 10.95%;
-    width: 14.2%;
-    height: 2.35%;
-    border-radius: 999px 999px 999px 3px;
-    font-size: clamp(10px, 2.8vw, 15px);
+    left: 75.6%;
+    top: 10.2%;
+    width: 13.0%;
+    height: 2.12%;
+    border-radius: 999px;
+    font-size: clamp(9px, 2.45vw, 13px);
   }
 
   .ata-hotspot {
