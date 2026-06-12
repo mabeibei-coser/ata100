@@ -6,6 +6,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 const fmtDate = (ts) => {
   if (!ts) return '—';
@@ -18,25 +19,48 @@ const daysLeft = (ts) => {
   return Math.max(0, Math.ceil((ts - Date.now()) / 86400000));
 };
 
+const maskPhone = (p) => (p ? String(p).replace(/(\d{3})\d{6}(\d{2})/, '$1******$2') : '');
+
 /**
  * 个人中心：VIP 状态卡 + 两个快捷入口（历史记录 / 支付记录）。
  * 支付记录抽到独立视图 Payments，点击按钮路由进入。
  */
-export default function Profile({ membership, onBuy, onBack, onGoHistory, onGoPayments, onLogout }) {
+export default function Profile({ membership, phone, onBuy, onBack, onGoHistory, onGoPayments, onLogout }) {
   const isVip = membership?.isVip;
   const left = isVip ? daysLeft(membership.vipExpireAt) : 0;
 
   return (
     <Box sx={{ maxWidth: 540, mx: 'auto' }}>
-      {/* 顶部返回 + 标题 */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-        <IconButton size="small" onClick={onBack} sx={{
-          color: 'var(--ink-3)', mr: 0.5,
-          '&:hover': { color: 'var(--ink)', background: 'var(--bg-mute)' },
-        }}>
-          <ArrowBackIcon sx={{ fontSize: 18 }} />
-        </IconButton>
-        <h2 className="h-section" style={{ fontSize: '1.15rem' }}>个人中心</h2>
+      {/* 顶部返回 + 标题 + 右侧手机号/退出 */}
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <IconButton size="small" onClick={onBack} sx={{
+            color: 'var(--ink-3)', mr: 0.5,
+            '&:hover': { color: 'var(--ink)', background: 'var(--bg-mute)' },
+          }}>
+            <ArrowBackIcon sx={{ fontSize: 18 }} />
+          </IconButton>
+          <h2 className="h-section" style={{ fontSize: '1.15rem' }}>个人中心</h2>
+        </Box>
+        {onLogout && (
+          <Box
+            component="button"
+            type="button"
+            onClick={onLogout}
+            sx={{
+              display: 'flex', alignItems: 'center', gap: 0.5,
+              background: 'none', border: 0, padding: '4px 0',
+              cursor: 'pointer', fontFamily: 'inherit',
+              color: 'var(--ink-3)', transition: 'color .2s ease',
+              '&:hover': { color: 'var(--ink-2)' },
+            }}
+          >
+            <Box className="num" sx={{ fontSize: '0.78rem', letterSpacing: '0.01em' }}>
+              {maskPhone(phone)}
+            </Box>
+            <LogoutOutlinedIcon sx={{ fontSize: 15 }} />
+          </Box>
+        )}
       </Box>
 
       {/* VIP 状态卡：VIP → 金色 hero；非 VIP → 青绿玻璃卡 + 金色 CTA */}
@@ -159,29 +183,6 @@ export default function Profile({ membership, onBuy, onBack, onGoHistory, onGoPa
         />
       </Box>
 
-      {/* 低调的退出登录入口 */}
-      {onLogout && (
-        <Box sx={{ textAlign: 'center', mt: 4, mb: 2 }}>
-          <Box
-            component="button"
-            type="button"
-            onClick={onLogout}
-            sx={{
-              background: 'none',
-              border: 0,
-              padding: '6px 12px',
-              cursor: 'pointer',
-              fontSize: '0.82rem',
-              color: 'var(--ink-3)',
-              fontFamily: 'inherit',
-              transition: 'color .2s ease',
-              '&:hover': { color: 'var(--ink-2)' },
-            }}
-          >
-            退出登录
-          </Box>
-        </Box>
-      )}
     </Box>
   );
 }
