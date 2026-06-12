@@ -362,7 +362,7 @@ function App() {
         {view !== 'home' && (
           <Box className="surface rise" component="section" sx={{ p: { xs: 2.5, md: 3.5 } }}>
             {view === 'billing' && <Billing onPaid={handlePaid} onBack={() => setView('home')} />}
-            {view === 'profile' && <Profile membership={membership} phone={me?.phone} onBuy={() => setView('billing')} onBack={() => setView('home')} onGoHistory={() => setView('history')} onGoPayments={() => setView('payments')} onLogout={handleLogout} />}
+            {view === 'profile' && <Profile membership={membership} onBuy={() => setView('billing')} onBack={() => setView('home')} onGoHistory={() => setView('history')} onGoPayments={() => setView('payments')} />}
             {view === 'history' && <History onBack={() => setView('home')} isVip={isVip} onGoBilling={() => setView('billing')} onGoSalaryReport={(id) => goProduct(`/a500/?historyId=${id}`)} />}
             {view === 'payments' && <Payments onBack={() => setView('profile')} />}
           </Box>
