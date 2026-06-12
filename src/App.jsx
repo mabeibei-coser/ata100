@@ -10,6 +10,7 @@ import HistoryIcon from '@mui/icons-material/History'
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
 import './styles/index.css'
 import homeHeroDesktop from './assets/home-ata-hero-desktop.png'
 import homeHeroMobile from './assets/home-ata-hero-mobile.png'
@@ -33,7 +34,7 @@ const daysLeft = (ts) => {
 }
 
 // 手机号中间 4 位打码：18621933756 → 186****3756
-const maskPhone = (p) => (p ? String(p).replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : p)
+const maskPhone = (p) => (p ? String(p).replace(/(\d{3})\d{6}(\d{2})/, '$1******$2') : p)
 
 // 数据更新标签：始终显示当前真实年月（如「2026年6月」），随系统时间自动走
 const currentMonthLabel = () => {
@@ -210,7 +211,21 @@ function App() {
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
             {me ? (
-              <Box className="num" sx={{ fontSize: '0.82rem', color: 'var(--ink-2)', display: { xs: 'none', sm: 'block' } }}>{maskPhone(me.phone)}</Box>
+              <Box
+                component="button"
+                type="button"
+                onClick={handleLogout}
+                sx={{
+                  display: 'flex', alignItems: 'center', gap: 0.5,
+                  background: 'none', border: 0, padding: '4px 0',
+                  cursor: 'pointer', fontFamily: 'inherit',
+                  color: 'var(--ink-3)', transition: 'color .2s ease',
+                  '&:hover': { color: 'var(--ink-2)' },
+                }}
+              >
+                <Box className="num" sx={{ fontSize: '0.78rem', letterSpacing: '0.01em' }}>{maskPhone(me.phone)}</Box>
+                <LogoutOutlinedIcon sx={{ fontSize: 15 }} />
+              </Box>
             ) : (
               <Button onClick={() => setView('login')} disableElevation sx={{
                 px: 1.75, py: 0.6, fontSize: '0.82rem', fontWeight: 600,
