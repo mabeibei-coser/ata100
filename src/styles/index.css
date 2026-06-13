@@ -2694,7 +2694,7 @@ body::before {
   }
 
   .ata-design-stage {
-    transform: translateY(10px);
+    transform: none;
   }
 
   .ata-version-cover-mobile {
@@ -2715,36 +2715,36 @@ body::before {
 
   .ata-mobile-salary {
     left: 5.5%;
-    top: 41.75%;
-    width: 89.0%;
-    height: 14.3%;
-  }
-
-  .ata-mobile-panorama {
-    left: 5.5%;
-    top: 57.95%;
+    top: 42.1%;
     width: 89.0%;
     height: 14.2%;
   }
 
+  .ata-mobile-panorama {
+    left: 5.5%;
+    top: 58.2%;
+    width: 89.0%;
+    height: 14.1%;
+  }
+
   .ata-mobile-home {
     left: 0;
-    top: 91.1%;
+    top: 91.15%;
     width: 25%;
-    height: 8.9%;
+    height: 8.85%;
   }
 
   .ata-mobile-records {
     left: 50%;
-    top: 91.1%;
+    top: 91.15%;
     width: 25%;
-    height: 8.9%;
+    height: 8.85%;
   }
 
   .ata-mobile-profile {
     left: 75%;
-    top: 91.1%;
+    top: 91.15%;
     width: 25%;
-    height: 8.9%;
+    height: 8.85%;
   }
 }
