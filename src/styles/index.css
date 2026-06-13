@@ -2694,7 +2694,7 @@ body::before {
   }
 
   .ata-design-stage {
-    transform: none;
+    transform: translateY(10px);
   }
 
   .ata-version-cover-mobile {
