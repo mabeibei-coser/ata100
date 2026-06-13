@@ -2568,7 +2568,7 @@ body::before {
 .ata-mobile-stage {
   display: none;
   width: 100vw;
-  aspect-ratio: 853 / 1844;
+  aspect-ratio: 854 / 1852;
 }
 
 .ata-design-image {
@@ -2694,30 +2694,19 @@ body::before {
   }
 
   .ata-design-stage {
-    transform: translateY(-3.4dvh);
+    transform: none;
   }
 
   .ata-version-cover-mobile {
-    left: 2.6%;
-    top: 1.2%;
-    width: 34.8%;
-    height: 2.8%;
+    display: none;
   }
 
   .ata-title-cover-mobile {
-    left: 74.0%;
-    top: 11.15%;
-    width: 25.5%;
-    height: 5.25%;
+    display: none;
   }
 
   .ata-pro-badge-mobile {
-    left: 75.6%;
-    top: 10.2%;
-    width: 13.0%;
-    height: 2.12%;
-    border-radius: 999px;
-    font-size: clamp(9px, 2.45vw, 13px);
+    display: none;
   }
 
   .ata-hotspot {
@@ -2725,37 +2714,37 @@ body::before {
   }
 
   .ata-mobile-salary {
-    left: 7.74%;
-    top: 42.84%;
-    width: 84.4%;
-    height: 11.28%;
+    left: 5.5%;
+    top: 47.45%;
+    width: 89.0%;
+    height: 12.9%;
   }
 
   .ata-mobile-panorama {
-    left: 7.74%;
-    top: 55.91%;
-    width: 84.4%;
-    height: 11.28%;
+    left: 5.5%;
+    top: 62.05%;
+    width: 89.0%;
+    height: 12.8%;
   }
 
   .ata-mobile-home {
     left: 0;
-    top: 88.98%;
-    width: 33.33%;
-    height: 7.5%;
+    top: 91.98%;
+    width: 25%;
+    height: 8.02%;
   }
 
   .ata-mobile-records {
-    left: 33.33%;
-    top: 88.98%;
-    width: 33.33%;
-    height: 7.5%;
+    left: 50%;
+    top: 91.98%;
+    width: 25%;
+    height: 8.02%;
   }
 
   .ata-mobile-profile {
-    left: 66.66%;
-    top: 88.98%;
-    width: 33.34%;
-    height: 7.5%;
+    left: 75%;
+    top: 91.98%;
+    width: 25%;
+    height: 8.02%;
   }
 }
