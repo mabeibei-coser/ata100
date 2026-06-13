@@ -2540,3 +2540,222 @@ body::before {
     object-fit: contain;
   }
 }
+
+/* Final 2026-06 home design: pixel-locked desktop/mobile artwork with live hotspots. */
+.ata-home-page {
+  width: 100%;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 70% 45%, rgba(22, 111, 194, 0.16), transparent 34%),
+    #020b1b;
+}
+
+.ata-design-stage {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transform: translateY(-2.8dvh);
+}
+
+.ata-desktop-stage {
+  width: min(100vw, calc(100dvh * 16 / 9));
+  aspect-ratio: 16 / 9;
+}
+
+.ata-mobile-stage {
+  display: none;
+  width: 100vw;
+  aspect-ratio: 853 / 1844;
+}
+
+.ata-design-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
+.ata-hotspot {
+  position: absolute;
+  z-index: 2;
+  border: 0;
+  border-radius: 18px;
+  padding: 0;
+  color: transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+.ata-hotspot:focus-visible {
+  outline: 2px solid rgba(124, 232, 255, 0.78);
+  outline-offset: 4px;
+}
+
+.ata-hotspot:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.ata-title-cover,
+.ata-version-cover,
+.ata-pro-badge {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ata-title-cover,
+.ata-version-cover {
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 70% 50%, rgba(16, 83, 143, 0.14), transparent 60%),
+    linear-gradient(90deg, rgba(0, 9, 24, 0.99), rgba(2, 18, 43, 0.985));
+  box-shadow: 0 0 34px rgba(1, 10, 25, 0.56);
+}
+
+.ata-version-cover-desktop {
+  left: 5.2%;
+  top: 6.1%;
+  width: 16.8%;
+  height: 4.6%;
+}
+
+.ata-title-cover-desktop {
+  left: 44.8%;
+  top: 20.0%;
+  width: 17.2%;
+  height: 9.8%;
+}
+
+.ata-pro-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(222, 247, 255, 0.96);
+  font-family: 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  background:
+    linear-gradient(180deg, rgba(7, 43, 84, 0.72), rgba(3, 22, 50, 0.66));
+  border: 1px solid rgba(112, 211, 255, 0.5);
+  box-shadow:
+    0 0 12px rgba(55, 170, 255, 0.22),
+    inset 0 0 10px rgba(112, 211, 255, 0.12);
+  text-shadow: 0 1px 6px rgba(0, 10, 28, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.ata-pro-badge-desktop {
+  left: 45.65%;
+  top: 17.9%;
+  width: 4.85%;
+  height: 2.95%;
+  border-radius: 999px;
+  font-size: clamp(11px, 0.92vw, 18px);
+}
+
+.ata-desktop-salary {
+  left: 13.02%;
+  top: 68.42%;
+  width: 30.62%;
+  height: 19.72%;
+}
+
+.ata-desktop-panorama {
+  left: 45.42%;
+  top: 68.42%;
+  width: 30.62%;
+  height: 19.72%;
+}
+
+@media (max-width: 767px), (max-aspect-ratio: 3 / 4) {
+  .ata-home-page {
+    min-height: 100dvh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #ffffff;
+  }
+
+  .ata-desktop-stage {
+    display: none;
+  }
+
+  .ata-mobile-stage {
+    display: block;
+    flex: 0 0 100vw;
+    max-width: none;
+  }
+
+  .ata-design-stage {
+    transform: translateY(-3.4dvh);
+  }
+
+  .ata-version-cover-mobile {
+    left: 2.6%;
+    top: 1.2%;
+    width: 34.8%;
+    height: 2.8%;
+  }
+
+  .ata-title-cover-mobile {
+    left: 74.0%;
+    top: 11.15%;
+    width: 25.5%;
+    height: 5.25%;
+  }
+
+  .ata-pro-badge-mobile {
+    left: 75.6%;
+    top: 10.2%;
+    width: 13.0%;
+    height: 2.12%;
+    border-radius: 999px;
+    font-size: clamp(9px, 2.45vw, 13px);
+  }
+
+  .ata-hotspot {
+    border-radius: 12px;
+  }
+
+  .ata-mobile-salary {
+    left: 7.74%;
+    top: 42.84%;
+    width: 84.4%;
+    height: 11.28%;
+  }
+
+  .ata-mobile-panorama {
+    left: 7.74%;
+    top: 55.91%;
+    width: 84.4%;
+    height: 11.28%;
+  }
+
+  .ata-mobile-home {
+    left: 0;
+    top: 88.98%;
+    width: 33.33%;
+    height: 7.5%;
+  }
+
+  .ata-mobile-records {
+    left: 33.33%;
+    top: 88.98%;
+    width: 33.33%;
+    height: 7.5%;
+  }
+
+  .ata-mobile-profile {
+    left: 66.66%;
+    top: 88.98%;
+    width: 33.34%;
+    height: 7.5%;
+  }
+}
