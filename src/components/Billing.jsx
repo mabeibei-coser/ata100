@@ -14,12 +14,6 @@ const perMonth = (cents, days) => {
   const months = Math.max(1, days / 30);
   return `¥${(cents / 100 / months).toFixed(0)}/月`;
 };
-// 顶部 eyebrow 显示用户访问当天日期（2026.06.11 格式）
-const todayLabel = () => {
-  const d = new Date();
-  const pad = (n) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
-};
 
 // 普通用户 vs VIP 权限对比（替代原 BENEFITS 网格，更直观突出付费动机）
 const COMPARE_ROWS = [
@@ -120,22 +114,39 @@ export default function Billing({ onPaid, onBack }) {
 
   return (
     <Box sx={{ maxWidth: 540, mx: 'auto' }}>
-      {/* 顶部返回 */}
-      <Box sx={{ mb: 2 }}>
+      {/* 顶部返回 + 标题 */}
+      <Box sx={{ mb: 1, display: 'flex', alignItems: 'center', gap: 0.75 }}>
         <IconButton size="small" onClick={onBack} disabled={loading} sx={{
           color: 'var(--ink-3)',
+          flexShrink: 0,
           '&:hover': { color: 'var(--ink)', background: 'var(--bg-mute)' },
         }}>
           <ArrowBackIcon sx={{ fontSize: 18 }} />
         </IconButton>
-      </Box>
-
-      {/* 套餐选择标题 */}
-      <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-        <Box sx={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--ink)', letterSpacing: '-0.012em' }}>
+        <Box sx={{
+          flexShrink: 0,
+          fontSize: '0.92rem',
+          fontWeight: 700,
+          color: 'var(--ink)',
+          letterSpacing: '-0.012em',
+          whiteSpace: 'nowrap',
+        }}>
           选择套餐
         </Box>
-        <Box className="h-eyebrow num">{todayLabel()}</Box>
+      </Box>
+
+      {/* 信任元素：微信支付 + 加密 + 即时生效 */}
+      <Box sx={{
+        mb: 1.5,
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        gap: { xs: 1.4, sm: 2.5 },
+        rowGap: 0.75,
+      }}>
+        <Trust icon={<LockOutlinedIcon sx={{ fontSize: 14 }} />} text="微信支付加密" />
+        <Trust icon={<BoltOutlinedIcon sx={{ fontSize: 14 }} />} text="支付后立即生效" />
+        <Trust icon={<VerifiedOutlinedIcon sx={{ fontSize: 14 }} />} text="10万+会员" />
       </Box>
 
       {/* 套餐选择：选中态金色光晕，"推荐"badge 更醒目 */}
@@ -247,10 +258,14 @@ export default function Billing({ onPaid, onBack }) {
                 </Box>
                 {p.originalAmountCents && p.originalAmountCents > p.amountCents && (
                   <Box className="num" sx={{
-                    fontSize: '0.78rem',
-                    color: 'var(--ink-3)',
+                    mt: 0.35,
+                    fontSize: '1rem',
+                    color: 'var(--gold)',
+                    fontWeight: 800,
                     textDecoration: 'line-through',
-                    mt: 0.3,
+                    textDecorationThickness: '1px',
+                    lineHeight: 1,
+                    whiteSpace: 'nowrap',
                   }}>
                     {yuan(p.originalAmountCents)}
                   </Box>
@@ -351,19 +366,6 @@ export default function Billing({ onPaid, onBack }) {
         </Box>
       </Box>
 
-      {/* 信任元素：微信支付 + 加密 + 即时生效 */}
-      <Box sx={{
-        mt: 2,
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        gap: { xs: 1.5, sm: 2.5 },
-        rowGap: 1,
-      }}>
-        <Trust icon={<LockOutlinedIcon sx={{ fontSize: 14 }} />} text="微信支付加密" />
-        <Trust icon={<BoltOutlinedIcon sx={{ fontSize: 14 }} />} text="支付后立即生效" />
-        <Trust icon={<VerifiedOutlinedIcon sx={{ fontSize: 14 }} />} text="10万+会员" />
-      </Box>
     </Box>
   );
 }
