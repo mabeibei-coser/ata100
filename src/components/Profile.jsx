@@ -18,6 +18,17 @@ const daysLeft = (ts) => {
   return Math.max(0, Math.ceil((ts - Date.now()) / 86400000));
 };
 
+// 普通用户 vs VIP 权益对比（与开通页 Billing.jsx 保持一致）
+const COMPARE_ROWS = [
+  { k: '基础薪酬', free: '√',      vip: '√' },
+  { k: '谈薪筹码', free: '×',      vip: '√' },
+  { k: '细分行业', free: '×',      vip: '25+行业' },
+  { k: '历史查询', free: '×',      vip: '√' },
+  { k: '文档查询', free: '仅预览',  vip: '无限下载' },
+  { k: 'AI 通道',  free: '标准通道', vip: '高速通道' },
+  { k: '日限额',   free: '10次/天',  vip: '50次/天' },
+];
+
 /**
  * 个人中心：VIP 状态卡 + 两个快捷入口（历史记录 / 支付记录）。
  * 支付记录抽到独立视图 Payments，点击按钮路由进入。
@@ -157,6 +168,48 @@ export default function Profile({ membership, onBuy, onBack, onGoHistory, onGoPa
           label="支付记录"
           onClick={onGoPayments}
         />
+      </Box>
+
+      {/* 会员权益对比：照搬开通页（Billing）的「普通 vs VIP」对比表，让用户随时看到 VIP 价值 */}
+      <Box sx={{ mb: 1 }}>
+        <Box className="h-eyebrow" sx={{ mb: 1.25 }}>会员权益对比</Box>
+        <Box sx={{
+          borderRadius: 'var(--r-sm)',
+          border: '1px solid rgba(176, 138, 62, 0.28)',
+          background: 'var(--bg-elev)',
+          overflow: 'hidden',
+        }}>
+          {/* 表头 */}
+          <Box sx={{
+            display: 'grid',
+            gridTemplateColumns: '1.3fr 0.9fr 1.1fr',
+            background: 'rgba(176, 138, 62, 0.10)',
+            fontSize: '0.74rem',
+            fontWeight: 700,
+            letterSpacing: '0.01em',
+          }}>
+            <Box sx={{ px: 1.4, py: 0.95, color: 'var(--ink-2)' }}>权益</Box>
+            <Box sx={{ px: 1.2, py: 0.95, textAlign: 'center', color: 'var(--ink-3)' }}>普通用户</Box>
+            <Box sx={{ px: 1.2, py: 0.95, textAlign: 'center', color: 'var(--gold)' }}>VIP 用户</Box>
+          </Box>
+          {COMPARE_ROWS.map((row) => (
+            <Box key={row.k} sx={{
+              display: 'grid',
+              gridTemplateColumns: '1.3fr 0.9fr 1.1fr',
+              borderTop: '1px solid var(--line)',
+              fontSize: '0.78rem',
+              alignItems: 'center',
+            }}>
+              <Box sx={{ px: 1.4, py: 0.95, color: 'var(--ink)', fontWeight: 600 }}>{row.k}</Box>
+              <Box sx={{ px: 1.2, py: 0.95, textAlign: 'center', color: 'var(--ink-3)' }}>{row.free}</Box>
+              <Box sx={{
+                px: 1.2, py: 0.95, textAlign: 'center',
+                color: 'var(--gold)', fontWeight: 650,
+                background: 'rgba(176, 138, 62, 0.05)',
+              }}>{row.vip}</Box>
+            </Box>
+          ))}
+        </Box>
       </Box>
 
     </Box>

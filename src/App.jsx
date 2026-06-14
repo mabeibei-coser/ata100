@@ -419,6 +419,7 @@ function HomeLanding({ onGoIdentify, onGoResources, onGoHistory, onGoProfile }) 
         <button className="ata-hotspot ata-mobile-salary" type="button" aria-label="薪资查询" onClick={onGoIdentify} />
         <button className="ata-hotspot ata-mobile-panorama" type="button" aria-label="岗位全景" onClick={onGoResources} />
         <button className="ata-hotspot ata-mobile-home" type="button" aria-label="首页" />
+        <button className="ata-hotspot ata-mobile-discover" type="button" aria-label="发现 · 岗位全景" onClick={onGoResources} />
         <button className="ata-hotspot ata-mobile-records" type="button" aria-label="记录" onClick={onGoHistory} />
         <button className="ata-hotspot ata-mobile-profile" type="button" aria-label="我的" onClick={onGoProfile} />
       </main>

@@ -2739,6 +2739,13 @@ body::before {
     height: 8.85%;
   }
 
+  .ata-mobile-discover {
+    left: 25%;
+    top: 91.15%;
+    width: 25%;
+    height: 8.85%;
+  }
+
   .ata-mobile-records {
     left: 50%;
     top: 91.15%;
