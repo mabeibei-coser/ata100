@@ -2605,76 +2605,18 @@ body::before {
   background: rgba(255, 255, 255, 0.03);
 }
 
-.ata-title-cover,
-.ata-version-cover,
-.ata-pro-badge {
-  position: absolute;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.ata-title-cover,
-.ata-version-cover {
-  border-radius: 8px;
-  background:
-    radial-gradient(circle at 70% 50%, rgba(16, 83, 143, 0.14), transparent 60%),
-    linear-gradient(90deg, rgba(0, 9, 24, 0.99), rgba(2, 18, 43, 0.985));
-  box-shadow: 0 0 34px rgba(1, 10, 25, 0.56);
-}
-
-.ata-version-cover-desktop {
-  left: 5.2%;
-  top: 6.1%;
-  width: 16.8%;
-  height: 4.6%;
-}
-
-.ata-title-cover-desktop {
-  left: 44.8%;
-  top: 20.0%;
-  width: 17.2%;
-  height: 9.8%;
-}
-
-.ata-pro-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(222, 247, 255, 0.96);
-  font-family: 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  background:
-    linear-gradient(180deg, rgba(7, 43, 84, 0.72), rgba(3, 22, 50, 0.66));
-  border: 1px solid rgba(112, 211, 255, 0.5);
-  box-shadow:
-    0 0 12px rgba(55, 170, 255, 0.22),
-    inset 0 0 10px rgba(112, 211, 255, 0.12);
-  text-shadow: 0 1px 6px rgba(0, 10, 28, 0.72);
-  backdrop-filter: blur(8px);
-}
-
-.ata-pro-badge-desktop {
-  left: 45.65%;
-  top: 17.9%;
-  width: 4.85%;
-  height: 2.95%;
-  border-radius: 999px;
-  font-size: clamp(11px, 0.92vw, 18px);
-}
-
 .ata-desktop-salary {
-  left: 13.02%;
-  top: 68.42%;
-  width: 30.62%;
-  height: 19.72%;
+  left: 16.85%;
+  top: 65.25%;
+  width: 32.55%;
+  height: 21.55%;
 }
 
 .ata-desktop-panorama {
-  left: 45.42%;
-  top: 68.42%;
-  width: 30.62%;
-  height: 19.72%;
+  left: 51.15%;
+  top: 65.25%;
+  width: 32.05%;
+  height: 21.55%;
 }
 
 @media (max-width: 767px), (max-aspect-ratio: 3 / 4) {
@@ -2700,18 +2642,6 @@ body::before {
 
   .ata-design-stage {
     transform: none;
-  }
-
-  .ata-version-cover-mobile {
-    display: none;
-  }
-
-  .ata-title-cover-mobile {
-    display: none;
-  }
-
-  .ata-pro-badge-mobile {
-    display: none;
   }
 
   .ata-hotspot {
