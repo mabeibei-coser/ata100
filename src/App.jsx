@@ -11,8 +11,6 @@ import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
-import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined'
-import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined'
 import './styles/index.css'
 import homeHeroDesktop from './assets/home-ata-hero-desktop.png'
 import homeHeroMobile from './assets/home-ata-hero-mobile.png'
@@ -39,12 +37,6 @@ const daysLeft = (ts) => {
 
 // 手机号中间 4 位打码：18621933756 → 186****3756
 const maskPhone = (p) => (p ? String(p).replace(/(\d{3})\d{6}(\d{2})/, '$1******$2') : p)
-const THEME_KEY = 'ata-visual-theme'
-
-const readTheme = () => {
-  if (typeof window === 'undefined') return 'light'
-  return window.localStorage.getItem(THEME_KEY) === 'dark' ? 'dark' : 'light'
-}
 
 // 数据更新标签：始终显示当前真实年月（如「2026年6月」），随系统时间自动走
 const currentMonthLabel = () => {
@@ -57,7 +49,6 @@ const DOC_LIB_ATA_URL = '/a800/?category=' + encodeURIComponent('人才ATA')
 
 // ata100 = 薪酬域会员中心
 function App() {
-  const [theme, setTheme] = useState(readTheme)
   const [me, setMe] = useState(null)
   const [meReady, setMeReady] = useState(false)
   const [membership, setMembership] = useState(null)
@@ -76,11 +67,9 @@ function App() {
   const [pendingNav, setPendingNav] = useState(null)
 
   useEffect(() => {
-    document.documentElement.dataset.ataTheme = theme
-    window.localStorage.setItem(THEME_KEY, theme)
-  }, [theme])
-
-  const toggleTheme = () => setTheme((v) => (v === 'dark' ? 'light' : 'dark'))
+    document.documentElement.removeAttribute('data-ata-theme')
+    window.localStorage.removeItem('ata-visual-theme')
+  }, [])
 
   const refreshMembership = useCallback(() => {
     fetchMembership().then(setMembership).catch(() => setMembership(null))
@@ -148,14 +137,13 @@ function App() {
       }}>
         <Container maxWidth="xs" disableGutters sx={{ px: 0 }}>
           <Box sx={{ mb: 0.5 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
               <IconButton size="small" onClick={() => { setPendingNav(null); setView('home') }} sx={{
                 color: 'var(--ink-3)',
                 '&:hover': { color: 'var(--ink)', background: 'var(--bg-mute)' },
               }}>
                 <ArrowBackIcon sx={{ fontSize: 18 }} />
               </IconButton>
-              <ThemeToggle theme={theme} onToggle={toggleTheme} />
             </Box>
           </Box>
           <Box sx={{ textAlign: 'center', mb: 3 }}>
@@ -202,8 +190,6 @@ function App() {
   if (view === 'home') {
     return (
       <HomeLanding
-        theme={theme}
-        onToggleTheme={toggleTheme}
         onGoIdentify={() => goProduct('/a500/')}
         onGoResources={() => goProduct(DOC_LIB_ATA_URL)}
         onGoHistory={() => setView('history')}
@@ -259,7 +245,6 @@ function App() {
                 登录
               </Button>
             )}
-            <ThemeToggle theme={theme} onToggle={toggleTheme} compact />
           </Box>
         </Container>
       </Box>
@@ -404,10 +389,9 @@ function App() {
   )
 }
 
-function HomeLanding({ theme, onToggleTheme, onGoIdentify, onGoResources, onGoHistory, onGoProfile }) {
+function HomeLanding({ onGoIdentify, onGoResources, onGoHistory, onGoProfile }) {
   return (
     <Box className="ata-home-page">
-      <ThemeToggle theme={theme} onToggle={onToggleTheme} floating />
       <main className="ata-design-stage ata-desktop-stage" aria-label="岗位薪资查询平台5.0 专业版电脑版首页">
         <img
           className="ata-design-image"
@@ -439,20 +423,6 @@ function HomeLanding({ theme, onToggleTheme, onGoIdentify, onGoResources, onGoHi
         <button className="ata-hotspot ata-mobile-profile" type="button" aria-label="我的" onClick={onGoProfile} />
       </main>
     </Box>
-  )
-}
-
-function ThemeToggle({ theme, onToggle, compact = false, floating = false }) {
-  const isDark = theme === 'dark'
-  return (
-    <IconButton
-      className={`theme-switch${compact ? ' theme-switch-compact' : ''}${floating ? ' theme-switch-floating' : ''}`}
-      size="small"
-      onClick={onToggle}
-      aria-label={isDark ? '切换浅色风格' : '切换深色风格'}
-    >
-      {isDark ? <LightModeOutlinedIcon sx={{ fontSize: 18 }} /> : <DarkModeOutlinedIcon sx={{ fontSize: 18 }} />}
-    </IconButton>
   )
 }
 
