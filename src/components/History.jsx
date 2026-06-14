@@ -89,9 +89,9 @@ export default function History({ onBack, isVip, onGoBilling, onGoSalaryReport }
                 border: '1px solid var(--line)',
                 transition: 'all .18s cubic-bezier(0.2, 0.7, 0.2, 1)',
                 '&:hover': {
-                  borderColor: 'rgba(37, 99, 235, 0.32)',
-                  background: '#fff',
-                  boxShadow: '0 4px 12px rgba(37, 99, 235, 0.08)',
+                  borderColor: 'rgba(124, 232, 255, 0.32)',
+                  background: 'var(--bg-mute)',
+                  boxShadow: '0 10px 24px rgba(36, 198, 189, 0.10)',
                   transform: 'translateX(2px)',
                   '& .chevron': { transform: 'translateX(2px)', color: 'var(--accent)' },
                 },

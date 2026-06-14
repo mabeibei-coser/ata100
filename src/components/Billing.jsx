@@ -173,19 +173,19 @@ export default function Billing({ onPaid, onBack }) {
                 cursor: 'pointer',
                 borderRadius: 'var(--r-md)',
                 background: active
-                  ? 'linear-gradient(180deg, #fff7e3 0%, #fdf2d4 100%)'
+                  ? 'var(--pkg-active-bg)'
                   : 'var(--bg-elev)',
                 border: '1.5px solid',
                 borderColor: active ? 'var(--gold)' : 'var(--line)',
                 boxShadow: active
-                  ? '0 8px 22px rgba(176, 138, 62, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.6)'
+                  ? 'var(--pkg-active-shadow)'
                   : 'var(--shadow-sm)',
                 transition: 'all .2s cubic-bezier(0.2, 0.7, 0.2, 1)',
                 '&:hover': {
                   borderColor: active ? 'var(--gold)' : 'rgba(176, 138, 62, 0.40)',
                   transform: active ? 'none' : 'translateY(-1px)',
                   boxShadow: active
-                    ? '0 8px 22px rgba(176, 138, 62, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.6)'
+                    ? 'var(--pkg-active-shadow)'
                     : '0 6px 14px rgba(15, 118, 110, 0.08)',
                 },
               }}
@@ -217,7 +217,7 @@ export default function Billing({ onPaid, onBack }) {
                 }} />
                 <Box sx={{ minWidth: 0 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-                    <Box sx={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--ink)', lineHeight: 1.3 }}>
+                    <Box sx={{ fontSize: '0.95rem', fontWeight: 700, color: active ? 'var(--pkg-active-text)' : 'var(--ink)', lineHeight: 1.3 }}>
                       {p.label}
                     </Box>
                     {p.badge && !isRecommended && (
@@ -238,7 +238,7 @@ export default function Billing({ onPaid, onBack }) {
                   {p.durationDays > 30 && (
                     <Box className="num" sx={{
                       fontSize: '0.72rem',
-                      color: active ? 'var(--gold)' : 'var(--ink-3)',
+                      color: active ? 'var(--pkg-active-subtext)' : 'var(--ink-3)',
                       mt: 0.25, fontWeight: 600,
                     }}>
                       {perMonth(p.amountCents, p.durationDays)}
@@ -250,7 +250,7 @@ export default function Billing({ onPaid, onBack }) {
                 <Box className="num" sx={{
                   fontSize: '1.18rem',
                   fontWeight: 800,
-                  color: 'var(--ink)',
+                  color: active ? 'var(--pkg-active-price)' : 'var(--ink)',
                   letterSpacing: '-0.015em',
                   lineHeight: 1.1,
                 }}>
@@ -260,7 +260,7 @@ export default function Billing({ onPaid, onBack }) {
                   <Box className="num" sx={{
                     mt: 0.35,
                     fontSize: '1rem',
-                    color: 'var(--gold)',
+                    color: active ? 'var(--pkg-active-subtext)' : 'var(--gold)',
                     fontWeight: 800,
                     textDecoration: 'line-through',
                     textDecorationThickness: '1px',
@@ -377,10 +377,10 @@ function Trust({ icon, text }) {
       alignItems: 'center',
       gap: 0.5,
       fontSize: '0.72rem',
-      color: 'var(--ink-3)',
+      color: 'var(--ink-2)',
       letterSpacing: '0.01em',
     }}>
-      <Box sx={{ display: 'inline-flex', color: 'var(--ink-3)' }}>{icon}</Box>
+      <Box sx={{ display: 'inline-flex', color: 'var(--ink-2)' }}>{icon}</Box>
       {text}
     </Box>
   );

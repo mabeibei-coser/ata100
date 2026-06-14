@@ -93,8 +93,8 @@ export default function Profile({ membership, onBuy, onBack, onGoHistory, onGoPa
           </Box>
         </Box>
       ) : (
-        <Box className="glass-hero" sx={{ p: 2.5, mb: 3, position: 'relative', overflow: 'hidden' }}>
-          <Box sx={{
+        <Box className="glass-hero profile-lock-card" sx={{ p: 2.5, mb: 3, position: 'relative', overflow: 'hidden' }}>
+          <Box className="profile-lock-glow" sx={{
             position: 'absolute',
             top: -32, right: -32,
             width: 160, height: 160,
