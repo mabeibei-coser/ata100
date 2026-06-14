@@ -19,7 +19,7 @@ const perMonth = (cents, days) => {
 const COMPARE_ROWS = [
   { k: '基础薪酬', free: '√',      vip: '√' },
   { k: '谈薪筹码', free: '×',      vip: '√' },
-  { k: '细分行业', free: '×',      vip: '25+行业数据' },
+  { k: '细分行业', free: '×',      vip: '25+行业' },
   { k: '历史查询', free: '×',      vip: '√' },
   { k: '文档查询', free: '仅预览',  vip: '无限下载' },
   { k: 'AI 通道',  free: '标准通道', vip: '高速通道' },
