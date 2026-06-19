@@ -12,10 +12,6 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
 import './styles/index.css'
-import homeHeroDesktop from './assets/home-ata-hero-desktop.png'
-import homeHeroMobile from './assets/home-ata-hero-mobile.png'
-import salaryHomeDesktop from './assets/salary-platform-desktop-final.png'
-import salaryHomeMobile from './assets/salary-platform-mobile-final.png'
 import LoginForm from './components/LoginForm'
 import LegalView from './components/LegalView'
 import Billing from './components/Billing'
@@ -46,6 +42,30 @@ const currentMonthLabel = () => {
 
 // 岗位全景文档入口：A800 文档库（一库管两域，部署在 /a800/），按 category=人才ATA 过滤出薪酬域文档
 const DOC_LIB_ATA_URL = '/a800/?category=' + encodeURIComponent('人才ATA')
+const HOME_MOBILE_QUERY = '(max-width: 767px), (max-aspect-ratio: 3/4)'
+
+function useHomeMobileStage() {
+  const [isMobileStage, setIsMobileStage] = useState(() => (
+    typeof window !== 'undefined' && window.matchMedia(HOME_MOBILE_QUERY).matches
+  ))
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+    const media = window.matchMedia(HOME_MOBILE_QUERY)
+    const update = () => setIsMobileStage(media.matches)
+    update()
+
+    if (media.addEventListener) {
+      media.addEventListener('change', update)
+      return () => media.removeEventListener('change', update)
+    }
+
+    media.addListener(update)
+    return () => media.removeListener(update)
+  }, [])
+
+  return isMobileStage
+}
 
 // ata100 = 薪酬域会员中心
 function App() {
@@ -390,45 +410,45 @@ function App() {
 }
 
 function HomeLanding({ onGoIdentify, onGoResources, onGoHistory, onGoProfile }) {
+  const isMobileStage = useHomeMobileStage()
+  const homeImageSrc = `${import.meta.env.BASE_URL}${isMobileStage ? 'ata-home-mobile.jpg' : 'ata-home-desktop.jpg'}`
+
   return (
     <Box className="ata-home-page">
-      <main className="ata-design-stage ata-desktop-stage" aria-label="岗位薪资查询平台5.0 专业版电脑版首页">
-        <img
-          className="ata-design-image"
-          src={salaryHomeDesktop}
-          alt="岗位薪资查询平台5.0 专业版电脑版首页"
-          draggable="false"
-        />
-        <button className="ata-hotspot ata-desktop-salary" type="button" aria-label="薪资查询" onClick={onGoIdentify} />
-        <button className="ata-hotspot ata-desktop-panorama" type="button" aria-label="岗位全景" onClick={onGoResources} />
-      </main>
-
-      <main className="ata-design-stage ata-mobile-stage" aria-label="岗位薪资查询平台5.0 专业版手机版首页">
-        <img
-          className="ata-design-image"
-          src={salaryHomeMobile}
-          alt="岗位薪资查询平台5.0 专业版手机版首页"
-          draggable="false"
-        />
-        <button className="ata-hotspot ata-mobile-salary" type="button" aria-label="薪资查询" onClick={onGoIdentify} />
-        <button className="ata-hotspot ata-mobile-panorama" type="button" aria-label="岗位全景" onClick={onGoResources} />
-        <button className="ata-hotspot ata-mobile-home" type="button" aria-label="首页" />
-        <button className="ata-hotspot ata-mobile-discover" type="button" aria-label="发现 · 岗位全景" onClick={onGoResources} />
-        <button className="ata-hotspot ata-mobile-records" type="button" aria-label="记录" onClick={onGoHistory} />
-        <button className="ata-hotspot ata-mobile-profile" type="button" aria-label="我的" onClick={onGoProfile} />
-      </main>
+      {isMobileStage ? (
+        <main className="ata-design-stage ata-mobile-stage" aria-label="岗位薪资查询平台5.0 专业版手机版首页">
+          <img
+            className="ata-design-image"
+            src={homeImageSrc}
+            alt="岗位薪资查询平台5.0 专业版手机版首页"
+            fetchPriority="high"
+            loading="eager"
+            decoding="async"
+            draggable="false"
+          />
+          <button className="ata-hotspot ata-mobile-salary" type="button" aria-label="薪资查询" onClick={onGoIdentify} />
+          <button className="ata-hotspot ata-mobile-panorama" type="button" aria-label="岗位全景" onClick={onGoResources} />
+          <button className="ata-hotspot ata-mobile-home" type="button" aria-label="首页" />
+          <button className="ata-hotspot ata-mobile-discover" type="button" aria-label="发现 · 岗位全景" onClick={onGoResources} />
+          <button className="ata-hotspot ata-mobile-records" type="button" aria-label="记录" onClick={onGoHistory} />
+          <button className="ata-hotspot ata-mobile-profile" type="button" aria-label="我的" onClick={onGoProfile} />
+        </main>
+      ) : (
+        <main className="ata-design-stage ata-desktop-stage" aria-label="岗位薪资查询平台5.0 专业版电脑版首页">
+          <img
+            className="ata-design-image"
+            src={homeImageSrc}
+            alt="岗位薪资查询平台5.0 专业版电脑版首页"
+            fetchPriority="high"
+            loading="eager"
+            decoding="async"
+            draggable="false"
+          />
+          <button className="ata-hotspot ata-desktop-salary" type="button" aria-label="薪资查询" onClick={onGoIdentify} />
+          <button className="ata-hotspot ata-desktop-panorama" type="button" aria-label="岗位全景" onClick={onGoResources} />
+        </main>
+      )}
     </Box>
-  )
-}
-
-function HomeHeroArt() {
-  return (
-    <section className="home-hero-art" aria-hidden="true">
-      <picture>
-        <source media="(min-width: 768px)" srcSet={homeHeroDesktop} />
-        <img className="home-hero-image" src={homeHeroMobile} alt="" draggable="false" />
-      </picture>
-    </section>
   )
 }
 
