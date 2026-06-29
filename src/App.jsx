@@ -19,6 +19,7 @@ import Profile from './components/Profile'
 import History from './components/History'
 import Payments from './components/Payments'
 import { fetchMe, fetchMembership, logout } from './utils/api'
+import { initWxShare } from './utils/wxShare'
 
 const fmtDate = (ts) => {
   if (!ts) return '—'
@@ -89,6 +90,17 @@ function App() {
   useEffect(() => {
     document.documentElement.removeAttribute('data-ata-theme')
     window.localStorage.removeItem('ata-visual-theme')
+  }, [])
+
+  // 微信内：配置「···→ 发送给朋友/朋友圈」分享卡片（标题+简介+方形封面）。
+  // 非微信环境自动跳过。封面 ata-share-cover.jpg 放在 public/，按子路径自适应取绝对地址。
+  useEffect(() => {
+    initWxShare({
+      title: '薪资查询神器',
+      desc: '查薪资、看人才地图，求职跳槽心里有底',
+      link: window.location.href.split('#')[0],
+      imgUrl: `${window.location.origin}${import.meta.env.BASE_URL}ata-share-cover.jpg`,
+    })
   }, [])
 
   const refreshMembership = useCallback(() => {

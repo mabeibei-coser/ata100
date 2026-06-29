@@ -28,6 +28,7 @@ const {
   isSafeFromPath,
   resolveRedirect,
 } = await import("./lib/wechat-oauth.js");
+const { buildJsConfig } = await import("./lib/wechat-jssdk.js");
 
 const PORT = Number(process.env.ATA100_API_PORT || process.env.PORT) || 4004;
 const NOTIFY_PATH = "/api/pay/wechat/notify";
@@ -402,6 +403,38 @@ app.get(
     }
   })
 );
+
+// ════════════ 微信 JS-SDK 网页分享签名 ════════════
+// 前端 GET /api/wechat/js-config?url=<当前页URL> → 返回 wx.config 四件套。
+// 只给本站(h100.jsai100.com / *.jsai100.com / localhost)签名，拒绝给任意外链签名。
+app.get("/api/wechat/js-config", async (req, res) => {
+  const rawUrl = String(req.query.url || "");
+  let host;
+  try {
+    const u = new URL(rawUrl);
+    if (u.protocol !== "http:" && u.protocol !== "https:") throw new Error("proto");
+    host = u.host;
+  } catch {
+    return res.status(400).json({ error: "url 不合法" });
+  }
+  const allowedHost = process.env.ATA_ALLOWED_HOST;
+  const ok =
+    host === allowedHost ||
+    host === "jsai100.com" ||
+    host.endsWith(".jsai100.com") ||
+    host === "localhost" ||
+    host.startsWith("localhost:") ||
+    host.startsWith("127.0.0.1");
+  if (!ok) {
+    return res.status(400).json({ error: "url 非本站，拒绝签名" });
+  }
+  try {
+    res.json(await buildJsConfig(rawUrl));
+  } catch (err) {
+    console.error("[js-config] failed:", err.message);
+    res.status(500).json({ error: "签名生成失败" });
+  }
+});
 
 // ── 生产模式：托管 dist/ 静态资源 ──
 if (process.env.NODE_ENV === "production") {

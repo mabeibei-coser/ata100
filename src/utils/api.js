@@ -46,6 +46,10 @@ export const fetchHistory = () => http('GET', '/me/history');
 // ── 法律文档（公开：服务使用协议 terms / 隐私政策 privacy）──
 export const fetchLegal = (type) => http('GET', `/legal/${type}`);
 
+// ── 微信分享签名（公开：返回 wx.config 四件套）──
+export const fetchJsConfig = (url) =>
+  http('GET', `/wechat/js-config?url=${encodeURIComponent(url)}`);
+
 // ── 支付 ──
 // 下单。返回 { outTradeNo, jsapi, fakeMode } 或抛 needOauth 错误（401，data.redirectTo）。
 export const createOrder = (packageId, from = '/') => http('POST', '/pay/wechat/order', { packageId, from });
