@@ -18,6 +18,9 @@ export function isWeChatBrowser() {
  */
 export async function initWxShare({ title, desc, link, imgUrl }) {
   if (!isWeChatBrowser()) return;
+  // 预热分享缩略图：微信是异步拉缩略图的，图没拉完就分享 → 缩略图空白。
+  // 页面一打开就让微信 WebView 先把图缓存好，用户首次分享即可显示。
+  if (imgUrl) { try { const im = new Image(); im.src = imgUrl; } catch { /* noop */ } }
   try {
     // 签名 URL 必须去掉 # 后缀，且等于地址栏 URL（invalid signature 头号原因）
     const signUrl = window.location.href.split('#')[0];
